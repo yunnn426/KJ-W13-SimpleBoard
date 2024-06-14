@@ -1,14 +1,10 @@
 import React from "react";
 import HomeForm from "./HomeForm";
-import Navbar from "../../components/Navbar";
 
-const HomePage = ({ title }) => {
+const HomePage = () => {
     return (
-        <div>
-            <Navbar title={title}/>
-            <div className="page-container">
-                <HomeForm />
-            </div>
+        <div className="page-container">
+            <HomeForm />
         </div>
     )
 }

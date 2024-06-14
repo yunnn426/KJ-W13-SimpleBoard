@@ -1,12 +1,13 @@
 import React from 'react';
 import LoginForm from '../Login/LoginForm';
 
-const LoginPage = () => {
+const LoginPage = ({ setIsLoggedIn, setNickname }) => {
     return (
-        <div className="page-container">
-            <LoginForm />
+        <div>
+            <h2>Login Page</h2>
+            <LoginForm setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />
         </div>
     );
-};
+}
 
 export default LoginPage;

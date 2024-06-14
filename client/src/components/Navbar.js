@@ -1,34 +1,31 @@
-import React, { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
-import {jwtDecode} from 'jwt-decode';
-import '../styles/navbar.css';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import '../styles/navbar.css';  // 스타일 파일을 import
 
-const Navbar = ({ title }) => {
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const token = Cookies.get('accessToken');
-        if (token) {
-            try {
-                const decodedToken = jwtDecode(token);
-                setUser(decodedToken.nickname);
-            } catch (error) {
-                console.error('Error decoding token:', error);
-            }
+const Navbar = ({ nickname }) => {
+    const location = useLocation();
+    
+    const getCurrentPage = () => {
+        switch (location.pathname) {
+            case '/home':
+                return 'Home';
+            case '/dashboard':
+                return 'Board';
+            default:
+                return '';
         }
-        console.log(user);
-    }, []);
-
-
+    };
 
     return (
-        <nav id="navigation" className="navbar">
-            <ul >
-                <span >{title}</span>
-                <span>{user}</span>
+        <nav className="navbar">
+            <ul className="navbar-left">
+                <li>{getCurrentPage()}</li>
+            </ul>
+            <ul className="navbar-right">
+                <li>{nickname}</li>
             </ul>
         </nav>
-    )
-}
+    );
+};
 
 export default Navbar;

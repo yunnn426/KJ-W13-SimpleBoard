@@ -8,9 +8,9 @@ const jsConfetti = new JSConfetti(); // JSConfetti 인스턴스를 컴포넌트 
 
 const SignupForm = () => {
     const [formData, setFormData] = useState({
-        nickname: '',
         username: '',
-        password: ''
+        password: '',
+        nickname: ''
     });
 
     const [showConfetti, setShowConfetti] = useState(false); 
