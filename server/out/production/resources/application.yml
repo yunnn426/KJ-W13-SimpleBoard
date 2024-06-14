@@ -1,0 +1,18 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/boardTest
+    username: boardTest
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+#      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: d023281c3951fc5405000048fb55f4ec9ab474e30aeb2f81bef0acbbf14229db
