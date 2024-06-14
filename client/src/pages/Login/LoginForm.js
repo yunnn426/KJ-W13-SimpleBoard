@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
-// import JSConfetti from "js-confetti";
 import Cookies from 'js-cookie';
 import '../../styles/login.css';
-// import {jwtDecode} from 'jwt-decode';
 
 const decodeToken = (token) => {
     if (!token) {
@@ -53,34 +51,28 @@ const LoginForm = ({ setIsLoggedIn, setNickname }) => {
                 const data = await response.json();
 
                 // 서버로부터 받은 토큰을 쿠키에 저장
-                Cookies.set('accessToken', data.accessToken, {expires : 1});
-                Cookies.set('refreshToken', data.refreshToken, {expires : 1});
+                Cookies.set('accessToken', data.accessToken, { expires: 1 });
+                Cookies.set('refreshToken', data.refreshToken, { expires: 1 });
+                console.log(decodeToken(data.accessToken));
 
-                // 토큰이 문자열인지 확인
-                if (typeof data.token === 'string') {
-                    try {
-                        const decodedToken = decodeToken(data.accessToken);
-                        console.log('Login Successful:', data);
+                try {
+                    const decodedToken = decodeToken(data.accessToken);
+                    console.log('Login Successful:', data);
 
-                        setIsLoggedIn(true);
-                        setNickname(decodedToken.nickname);
-
-                        setShowConfetti(true);
-                        setTimeout(() => {
-                            setShowConfetti(false);
-                            navigate('/home');  // 로그인 성공 시 홈페이지로 이동
-                        }, 3000);
-                    } catch (error) {
-                        console.error('Error decoding token:', error);
-                        alert('An error occurred while processing your login. Please try again.');
-                    }
-                } else {
-                    console.error('Invalid token format received:', data.accessToken);
-                    alert('Invalid token format received. Please try again.');
+                    setIsLoggedIn(true);
+                    setNickname(decodedToken.nickname);
+                    setShowConfetti(true);
+                    setTimeout(() => {
+                        setShowConfetti(false);
+                        navigate('/home');  // 로그인 성공 시 홈페이지로 이동
+                    }, 3000);
+                } catch (error) {
+                    console.error('Error decoding token:', error);
+                    alert('An error occurred while processing your login. Please try again.');
                 }
             } else {
                 const errorData = await response.json();
-                alert(`Login failed: ${errorData.s}`);
+                alert(`Login failed: ${errorData.message}`);
             }
         } catch (error) {
             console.error('Error:', error);
