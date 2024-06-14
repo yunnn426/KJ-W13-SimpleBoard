@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c633b35e-b777-4cd5-ba4b-08a7a31eaf0e" name="Changes" comment="응애">
-      <change beforePath="$PROJECT_DIR$/.gradle/8.8/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.8/executionHistory/executionHistory.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/8.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.8/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -172,7 +169,7 @@
       <workItem from="1718364786995" duration="713000" />
       <workItem from="1718365538248" duration="6000" />
       <workItem from="1718365561391" duration="81000" />
-      <workItem from="1718367473385" duration="328000" />
+      <workItem from="1718367473385" duration="1145000" />
     </task>
     <task id="LOCAL-00001" summary="[Feat] :signIn, signOut 구현 완료">
       <option name="closed" value="true" />
