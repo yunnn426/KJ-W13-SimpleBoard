@@ -22,4 +22,5 @@ client/yarn-error.log*
 
 server/.idea
 server/.gradle
+server/.idea/workspace.xml
 
