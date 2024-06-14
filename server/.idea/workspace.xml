@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c633b35e-b777-4cd5-ba4b-08a7a31eaf0e" name="Changes" comment="응애" />
+    <list default="true" id="c633b35e-b777-4cd5-ba4b-08a7a31eaf0e" name="Changes" comment="응애">
+      <change beforePath="$PROJECT_DIR$/.gradle/8.8/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.8/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/8.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.8/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,6 +119,7 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Gradle.Build SoketAndBoard.executor": "Run",
+    "Gradle.Build server.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -166,7 +172,7 @@
       <workItem from="1718364786995" duration="713000" />
       <workItem from="1718365538248" duration="6000" />
       <workItem from="1718365561391" duration="81000" />
-      <workItem from="1718367473385" duration="21000" />
+      <workItem from="1718367473385" duration="328000" />
     </task>
     <task id="LOCAL-00001" summary="[Feat] :signIn, signOut 구현 완료">
       <option name="closed" value="true" />
@@ -208,7 +214,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718365628634</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="응애">
+      <option name="closed" value="true" />
+      <created>1718367582361</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1718367582361</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
