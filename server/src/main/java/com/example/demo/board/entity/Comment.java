@@ -1,5 +1,6 @@
 package com.example.demo.board.entity;
 
+import com.example.demo.config.BaseTimeEntity;
 import com.example.demo.member.entity.Member;
 
 import jakarta.persistence.Column;
@@ -13,18 +14,22 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
 	@Id
 	@Column(name = "comment_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long commentId;
+
+	private String comment;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
@@ -33,4 +38,5 @@ public class Comment {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
+
 }
