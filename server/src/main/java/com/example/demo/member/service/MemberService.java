@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.auth.jwt.JwtToken;
 import com.example.demo.auth.jwt.JwtTokenProvider;
 import com.example.demo.member.dto.MemberDto;
+import com.example.demo.member.dto.MemberSignInDto;
 import com.example.demo.member.dto.MemberSignUpDto;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
@@ -31,14 +33,18 @@ public class MemberService {
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	@Transactional
-	public JwtToken signIn(String username, String password) {
-		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(username, password);
-		Authentication authentication = authenticationManagerBuilder.getObject()
-			.authenticate(authenticationToken);
-		String nickname = getNicknameByUsername(username);
-		return jwtTokenProvider.generateToken(authentication, nickname);
+	public JwtToken signIn(MemberSignInDto memberSignInDto) {
+		Member member = memberRepository.findByUsername(memberSignInDto.getUsername())
+			.orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+
+		if (!passwordEncoder.matches(memberSignInDto.getPassword(), member.getPassword())) {
+			throw new IllegalArgumentException("Invalid username or password");
+		}
+
+		Authentication authentication = new UsernamePasswordAuthenticationToken(member.getUsername(), null, member.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
+		return jwtTokenProvider.generateToken(authentication, member.getNickname());
 	}
 
 	@Transactional
@@ -58,5 +64,4 @@ public class MemberService {
 			.orElseThrow(() -> new IllegalArgumentException("Username " + username + " not found."));
 		return member.getNickname();
 	}
-
 }

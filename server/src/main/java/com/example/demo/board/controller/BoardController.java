@@ -1,6 +1,9 @@
 package com.example.demo.board.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,27 +19,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.board.dto.CreatePostDto;
+import com.example.demo.board.dto.ResponsePagePostDto;
 import com.example.demo.board.dto.ResponsePostDto;
 import com.example.demo.board.dto.UpdatePostDto;
 import com.example.demo.board.dto.PostPagingDto;
 import com.example.demo.board.service.BoardService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/board/")
+@RequestMapping("/board")
 public class BoardController {
 
 	private final BoardService boardService;
+	private final PagedResourcesAssembler<ResponsePagePostDto> pagedResourcesAssembler;
 
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CreatePostDto createPost(
 		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestBody CreatePostDto createPostDto
+		@Valid @RequestBody CreatePostDto createPostDto
 	) {
 		String username = userDetails.getUsername();
 		return boardService.createPost(createPostDto, username);
@@ -44,11 +50,15 @@ public class BoardController {
 
 	@PatchMapping("/update")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public UpdatePostDto updatePost(@RequestBody UpdatePostDto boardUpdateDto) {
-		return boardService.updatePost(boardUpdateDto);
+	public UpdatePostDto updatePost(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@Valid @RequestBody UpdatePostDto boardUpdateDto
+	) {
+		return boardService.updatePost(boardUpdateDto, userDetails.getUsername());
 	}
 
 	@DeleteMapping("/delete/{postId}")
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Void> deletePost(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@PathVariable("postId") Long postId
@@ -57,9 +67,19 @@ public class BoardController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/posts")
+	@PostMapping("/posts")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public Page<ResponsePostDto> findPagingPost(@RequestBody PostPagingDto postPagingDto) {
-		return boardService.findAllPost(postPagingDto);
+	public PagedModel<EntityModel<ResponsePagePostDto>> getPagingPost(@Valid @RequestBody PostPagingDto postPagingDto) {
+		Page<ResponsePagePostDto> page = boardService.findAllPost(postPagingDto);
+		return pagedResourcesAssembler.toModel(page);
+	}
+
+	@GetMapping("/posts/{postId}")
+	@ResponseStatus(HttpStatus.ACCEPTED)
+	public ResponsePostDto getPostById(
+		@PathVariable("postId") Long postId
+	) {
+		log.info("Get post by id: {}", postId);
+		return boardService.getPostById(postId);
 	}
 }

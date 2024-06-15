@@ -1,5 +1,7 @@
 package com.example.demo.member.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -7,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberSignInDto {
 
-	private String username;
-	private String password;
+	@NotBlank(message = "Username is mandatory")
+	private final String username;
 
+	@NotBlank(message = "Password is mandatory")
+	private final String password;
 }

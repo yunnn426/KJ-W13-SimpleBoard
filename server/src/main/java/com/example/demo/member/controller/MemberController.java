@@ -11,6 +11,7 @@ import com.example.demo.member.dto.MemberSignUpDto;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.auth.jwt.JwtToken;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,8 +23,9 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/signin")
-	public JwtToken signIn(@RequestBody MemberSignInDto memberSignInDto) {
-		return memberService.signIn(memberSignInDto.getUsername(), memberSignInDto.getPassword());
+	public JwtToken signIn(@Valid @RequestBody MemberSignInDto memberSignInDto) {
+		log.info("{}, {}", memberSignInDto.getUsername(), memberSignInDto.getPassword());
+		return memberService.signIn(memberSignInDto);
 	}
 
 	@PostMapping("/signup")
