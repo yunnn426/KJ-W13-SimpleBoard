@@ -75,8 +75,8 @@ const BoardForm = () => {
 
   // 게시글 한 개 보기
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-  const viewPost = (post) => {
-    setSelectedPost(post);
+  const viewPost = (postId) => {
+    setSelectedPost(postId);
     openPostModal();
   };
 
@@ -95,11 +95,13 @@ const BoardForm = () => {
           글쓰기
         </button>
         {posts.map((post) => (
-          <Post key={post.id} value={post} onClick={viewPost} />
+          <Post key={post.id} value={post} onClick={() => viewPost(post.postId)} />
         ))}
       </div>
       <CreateModal isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
-      <PostModal isOpen={isPostModalOpen} onClose={closePostModal} value={selectedPost}></PostModal>
+      {isPostModalOpen && (
+        <PostModal isOpen={isPostModalOpen} onClose={closePostModal} postId={selectedPost}></PostModal>
+      )}
       <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );

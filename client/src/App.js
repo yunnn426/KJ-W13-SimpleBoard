@@ -52,7 +52,7 @@ const App = () => {
   }, []);
 
   return (
-    <UrlContext.Provider value="http://192.168.0.95:8090">
+    <UrlContext.Provider value="http://localhost:8080">
       <Router>
         {isLoggedIn && <Navbar nickname={nickname} />}
         <Routes>
