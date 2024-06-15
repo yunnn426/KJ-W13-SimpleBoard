@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import SignupPage from '../src/pages/SignUp/SignupPage';
 import LoginPage from '../src/pages/Login/LoginPage';
 import HomePage from '../src/pages/Home/HomePage';
 import Cookies from 'js-cookie';
-import Navbar from '../src/components/navbar';
-// import {jwtDecode} from 'jwt-decode';
+import Navbar from '../src/components/Navbar';
+import BoardPage from './pages/Board/BoardPage';
+
+/* 전역 url 설정 */
+export const UrlContext = createContext();
 
 const decodeToken = (token) => {
     if (!token) {
@@ -49,14 +52,17 @@ const  App = () => {
     },[])
 
     return (
-        <Router>
-            {isLoggedIn && <Navbar nickname={nickname} />}
-            <Routes>
-                <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />} />
-                <Route path="/signup" element={<SignupPage />} />
-                <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/" />} />
-            </Routes>
-        </Router>
+        <UrlContext.Provider value='http://192.168.0.95:8090'>
+            <Router>
+                {isLoggedIn && <Navbar nickname={nickname} />}
+                <Routes>
+                    <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/" />} />
+                    <Route path="/board" element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />} />
+                </Routes>
+            </Router>
+        </UrlContext.Provider>
     );
 }
 

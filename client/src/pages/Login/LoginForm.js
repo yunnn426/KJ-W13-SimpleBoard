@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
 import Cookies from 'js-cookie';
 import '../../styles/login.css';
+import { UrlContext } from '../../App';
+
 
 const decodeToken = (token) => {
     if (!token) {
@@ -30,6 +32,9 @@ const LoginForm = ({ setIsLoggedIn, setNickname }) => {
     const [showConfetti, setShowConfetti] = useState(false);
     const navigate = useNavigate();
 
+    /* 전역 url 불러오기 */
+    const url = useContext(UrlContext);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -39,14 +44,13 @@ const LoginForm = ({ setIsLoggedIn, setNickname }) => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://192.168.0.95:8090/signin', {
+            const response = await fetch(`${url}/signin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
-
             if (response.ok) {
                 const data = await response.json();
 

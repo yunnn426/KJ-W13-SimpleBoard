@@ -9,14 +9,14 @@ const HomeForm = () => {
         navigate('/game');
     }
 
-    const handleDashboardClick = () => {
-        navigate('/dashboard');
+    const handleBoardClick = () => {
+        navigate('/board');
     }
 
     return (
         <div className="home-container">
             <button onClick={handleGameClick}>끝말 잇기</button> 
-            <button onClick={handleDashboardClick}>게시판</button> 
+            <button onClick={handleBoardClick}>게시판</button> 
         </div>
     )
 };
