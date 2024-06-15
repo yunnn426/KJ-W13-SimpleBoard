@@ -1,0 +1,26 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 10;
+}
+
+.post-container {
+  background-color: white;
+  border-radius: 8px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+.post-container:hover {
+  cursor: pointer;
+}
+
+p {
+  color: #797979;
+}

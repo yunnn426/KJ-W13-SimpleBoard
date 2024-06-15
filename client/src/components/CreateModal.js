@@ -1,15 +1,15 @@
-import React, { useState, useContext } from "react";
-import Cookies from "js-cookie";
-import { UrlContext } from "../App";
-import "../styles/modal.css";
+import React, { useState, useContext } from 'react';
+import Cookies from 'js-cookie';
+import { UrlContext } from '../App';
+import '../styles/modal.css';
 
-const ModalForm = ({ isOpen, onClose, onPostSuccess }) => {
+const CreateModal = ({ isOpen, onClose, onPostSuccess }) => {
   const url = useContext(UrlContext);
-  const token = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken');
 
   const [formData, setFormData] = useState({
-    title: "",
-    content: "",
+    title: '',
+    content: '',
   });
 
   const handleChange = (e) => {
@@ -24,10 +24,10 @@ const ModalForm = ({ isOpen, onClose, onPostSuccess }) => {
     e.preventDefault();
     try {
       const response = await fetch(`${url}/board/create`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
@@ -41,9 +41,14 @@ const ModalForm = ({ isOpen, onClose, onPostSuccess }) => {
         alert(`Submit post failed: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       alert('An error occurred while posting. Please try again.');
     }
+
+    setFormData({
+      title: '',
+      content: '',
+    });
   };
 
   if (!isOpen) return null;
@@ -85,5 +90,4 @@ const ModalForm = ({ isOpen, onClose, onPostSuccess }) => {
     </div>
   );
 };
-
-export default ModalForm;
+export default CreateModal;
