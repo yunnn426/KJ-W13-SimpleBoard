@@ -27,13 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/board/")
+@RequestMapping("/board")
 public class BoardController {
 
 	private final BoardService boardService;
 
 	@PostMapping("/create")
-	@ResponseStatus(HttpStatus.CREATED)
 	public CreatePostDto createPost(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@RequestBody CreatePostDto createPostDto
