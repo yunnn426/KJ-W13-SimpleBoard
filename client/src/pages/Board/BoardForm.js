@@ -5,6 +5,7 @@ import ModalForm from "../../components/ModalForm";
 import "../../styles/board.css";
 import Pagination from "./Pagination";
 import "../../styles/pagination.css";
+
 const BoardForm = () => {
   const url = useContext(UrlContext);
   const token = Cookies.get("accessToken");
@@ -19,9 +20,9 @@ const BoardForm = () => {
   // 게시글 불러오기
   const fetchBoard = async () => {
     const queryParams = {
-      page: 0,
-      size: 5,
-      sort: "DESC",
+      page,
+      size,
+      sort,
     };
 
     try {
@@ -36,9 +37,6 @@ const BoardForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-
-        // 응답 통째로 출력
-        // console.log(data);
         const p = data._embedded.responsePagePostDtoList;
         setTotalItems(data.totalItems);
         setTotalPages(Math.ceil(data.totalItems / size));
@@ -68,6 +66,10 @@ const BoardForm = () => {
     setIsModalOpen(false);
   };
 
+  const handlePostSuccess = () => {
+    fetchBoard(); 
+  };
+
   return (
     <div>
       <div className="board-container">
@@ -81,7 +83,7 @@ const BoardForm = () => {
           </div>
         ))}
       </div>
-      <ModalForm isOpen={isModalOpen} onClose={closeModal} />
+      <ModalForm isOpen={isModalOpen} onClose={closeModal} onPostSuccess={handlePostSuccess} />
       <Pagination
         currentPage={page}
         totalPages={totalPages}
@@ -90,4 +92,5 @@ const BoardForm = () => {
     </div>
   );
 };
+
 export default BoardForm;
