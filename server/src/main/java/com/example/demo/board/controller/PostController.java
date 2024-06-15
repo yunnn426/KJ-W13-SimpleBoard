@@ -23,7 +23,7 @@ import com.example.demo.board.dto.ResponsePagePostDto;
 import com.example.demo.board.dto.ResponsePostDto;
 import com.example.demo.board.dto.UpdatePostDto;
 import com.example.demo.board.dto.PostPagingDto;
-import com.example.demo.board.service.BoardService;
+import com.example.demo.board.service.PostService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +33,9 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/board")
-public class BoardController {
+public class PostController {
 
-	private final BoardService boardService;
-	private final PagedResourcesAssembler<ResponsePagePostDto> pagedResourcesAssembler;
+	private final PostService postService;
 
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -45,7 +44,7 @@ public class BoardController {
 		@Valid @RequestBody CreatePostDto createPostDto
 	) {
 		String username = userDetails.getUsername();
-		return boardService.createPost(createPostDto, username);
+		return postService.createPost(createPostDto, username);
 	}
 
 	@PatchMapping("/update")
@@ -54,7 +53,7 @@ public class BoardController {
 		@AuthenticationPrincipal UserDetails userDetails,
 		@Valid @RequestBody UpdatePostDto boardUpdateDto
 	) {
-		return boardService.updatePost(boardUpdateDto, userDetails.getUsername());
+		return postService.updatePost(boardUpdateDto, userDetails.getUsername());
 	}
 
 	@DeleteMapping("/delete/{postId}")
@@ -63,23 +62,35 @@ public class BoardController {
 		@AuthenticationPrincipal UserDetails userDetails,
 		@PathVariable("postId") Long postId
 	) {
-		boardService.deletePost(postId, userDetails.getUsername());
+		postService.deletePost(postId, userDetails.getUsername());
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/posts")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public PagedModel<EntityModel<ResponsePagePostDto>> getPagingPost(@Valid @RequestBody PostPagingDto postPagingDto) {
-		Page<ResponsePagePostDto> page = boardService.findAllPost(postPagingDto);
+	public PagedModel<EntityModel<ResponsePagePostDto>> getPagingPost(
+		@Valid @RequestBody PostPagingDto postPagingDto,
+		PagedResourcesAssembler<ResponsePagePostDto> pagedResourcesAssembler
+	) {
+		Page<ResponsePagePostDto> page = postService.findAllPost(postPagingDto);
 		return pagedResourcesAssembler.toModel(page);
 	}
 
 	@GetMapping("/posts/{postId}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public ResponsePostDto getPostById(
-		@PathVariable("postId") Long postId
-	) {
-		log.info("Get post by id: {}", postId);
-		return boardService.getPostById(postId);
+	public ResponsePostDto getPostById(@PathVariable("postId") Long postId) {
+		return postService.getPostById(postId);
 	}
+
+	@PostMapping("/posts/{postId}/comment")
+	@ResponseStatus(HttpStatus.CREATED)
+	public CreatePostDto createComment(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@Valid @RequestBody CreatePostDto createPostDto
+	) {
+		String username = userDetails.getUsername();
+		return postService.createPost(createPostDto, username);
+	}
+
+
 }
