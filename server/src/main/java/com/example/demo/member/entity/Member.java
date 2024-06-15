@@ -46,15 +46,15 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
 	private String nickname;
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.LAZY)
 	@Builder.Default
 	private List<String> roles = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	@Builder.Default
 	private List<Comment> commentList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
 	@Builder.Default
 	private List<LikeTable> likeTableList = new ArrayList<>();
 

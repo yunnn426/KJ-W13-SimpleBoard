@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.board.dto.CreateCommentOrLikeDto;
 import com.example.demo.board.dto.CreatePostDto;
 import com.example.demo.board.dto.ResponsePagePostDto;
 import com.example.demo.board.dto.ResponsePostDto;
@@ -82,14 +83,14 @@ public class PostController {
 		return postService.getPostById(postId);
 	}
 
-	@PostMapping("/posts/{postId}/comment")
+	@PostMapping("/reaction")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CreatePostDto createComment(
+	public void createCommentOrLike(
 		@AuthenticationPrincipal UserDetails userDetails,
-		@Valid @RequestBody CreatePostDto createPostDto
+		@Valid @RequestBody CreateCommentOrLikeDto createCommentOrLikeDto
 	) {
 		String username = userDetails.getUsername();
-		return postService.createPost(createPostDto, username);
+		postService.createCommentOrLike(createCommentOrLikeDto, username);
 	}
 
 

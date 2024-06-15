@@ -36,4 +36,29 @@ public class LikeTable extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
+
+	public void setMember(Member member) {
+		this.member = member;
+		if (!member.getLikeTableList().contains(this)) {
+			member.getLikeTableList().add(this);
+		}
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
+		if (!post.getLikeList().contains(this)) {
+			post.getLikeList().add(this);
+		}
+	}
+
+	public void deleteLike() {
+		Post post = this.getPost();
+		if (post != null) {
+			post.getLikeList().remove(this);
+		}
+		Member member = this.getMember();
+		if (member != null) {
+			member.getLikeTableList().remove(this);
+		}
+	}
 }
