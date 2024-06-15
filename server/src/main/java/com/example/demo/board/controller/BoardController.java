@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
 
 import com.example.demo.board.dto.CreatePostDto;
 import com.example.demo.board.dto.ResponsePostDto;
@@ -21,6 +22,7 @@ import com.example.demo.board.dto.UpdatePostDto;
 import com.example.demo.board.dto.PostPagingDto;
 import com.example.demo.board.service.BoardService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,9 +35,10 @@ public class BoardController {
 	private final BoardService boardService;
 
 	@PostMapping("/create")
+	@ResponseStatus(HttpStatus.CREATED)
 	public CreatePostDto createPost(
 		@AuthenticationPrincipal UserDetails userDetails,
-		@RequestBody CreatePostDto createPostDto
+		@Valid @RequestBody CreatePostDto createPostDto
 	) {
 		String username = userDetails.getUsername();
 		return boardService.createPost(createPostDto, username);
@@ -43,11 +46,12 @@ public class BoardController {
 
 	@PatchMapping("/update")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public UpdatePostDto updatePost(@RequestBody UpdatePostDto boardUpdateDto) {
+	public UpdatePostDto updatePost(@Valid @RequestBody UpdatePostDto boardUpdateDto) {
 		return boardService.updatePost(boardUpdateDto);
 	}
 
 	@DeleteMapping("/delete/{postId}")
+	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Void> deletePost(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@PathVariable("postId") Long postId
@@ -58,7 +62,7 @@ public class BoardController {
 
 	@GetMapping("/posts")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public Page<ResponsePostDto> findPagingPost(@RequestBody PostPagingDto postPagingDto) {
+	public Page<ResponsePostDto> findPagingPost(@Valid @RequestBody PostPagingDto postPagingDto) {
 		return boardService.findAllPost(postPagingDto);
 	}
 }
