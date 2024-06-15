@@ -1,36 +1,31 @@
-import React, { useState, useEffect, createContext } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import SignupPage from "../src/pages/SignUp/SignupPage";
-import LoginPage from "../src/pages/Login/LoginPage";
-import HomePage from "../src/pages/Home/HomePage";
-import BoardPage from "../src/pages/Board/BoardPage";
-import Cookies from "js-cookie";
-import Navbar from "./components/Navbar";
+import React, { useState, useEffect, createContext } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import SignupPage from '../src/pages/SignUp/SignupPage';
+import LoginPage from '../src/pages/Login/LoginPage';
+import HomePage from '../src/pages/Home/HomePage';
+import BoardPage from '../src/pages/Board/BoardPage';
+import Cookies from 'js-cookie';
+import Navbar from '../src/components/Navbar';
 // import {jwtDecode} from 'jwt-decode';
 
 export const UrlContext = createContext();
 
 const decodeToken = (token) => {
   if (!token) {
-    throw new Error("No token provided");
+    throw new Error('No token provided');
   }
 
-  const base64Url = token.split(".")[1];
+  const base64Url = token.split('.')[1];
   if (!base64Url) {
-    throw new Error("Invalid token");
+    throw new Error('Invalid token');
   }
 
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
     atob(base64)
-      .split("")
-      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-      .join("")
+      .split('')
+      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
   );
 
   return JSON.parse(jsonPayload);
@@ -38,10 +33,10 @@ const decodeToken = (token) => {
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState('');
   console.log(setNickname);
   useEffect(() => {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get('accessToken');
     if (token) {
       try {
         setIsLoggedIn(true);
@@ -49,9 +44,9 @@ const App = () => {
         console.log(decodedToken.nickname);
         setNickname(decodedToken.nickname);
       } catch (error) {
-        console.error("Error decoding token:", error);
+        console.error('Error decoding token:', error);
         setIsLoggedIn(false);
-        setNickname("");
+        setNickname('');
       }
     }
   }, []);
@@ -67,22 +62,13 @@ const App = () => {
               isLoggedIn ? (
                 <Navigate to="/home" />
               ) : (
-                <LoginPage
-                  setIsLoggedIn={setIsLoggedIn}
-                  setNickname={setNickname}
-                />
+                <LoginPage setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />
               )
             }
           />
           <Route path="/signup" element={<SignupPage />} />
-          <Route
-            path="/home"
-            element={isLoggedIn ? <HomePage /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/board"
-            element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />}
-          />
+          <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/" />} />
+          <Route path="/board" element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />} />
         </Routes>
       </Router>
     </UrlContext.Provider>
