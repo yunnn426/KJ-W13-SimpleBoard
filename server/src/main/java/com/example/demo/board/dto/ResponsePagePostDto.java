@@ -21,7 +21,6 @@ public class ResponsePagePostDto {
 
 	private Long postId;
 	private String title;
-	private String content;
 	private String writer;
 	private String createdDate;
 	private String lastModifiedDate;
@@ -30,7 +29,6 @@ public class ResponsePagePostDto {
 		return ResponsePagePostDto.builder()
 			.postId(post.getPostId())
 			.title(post.getTitle())
-			.content(post.getContent())
 			.writer(post.getWriter().getNickname())
 			.createdDate(DateTimeUtil.formatDateTime(post.getCreatedDate()))
 			.lastModifiedDate(DateTimeUtil.formatDateTime(post.getLastModifiedDate()))

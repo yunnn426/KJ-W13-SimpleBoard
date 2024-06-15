@@ -17,5 +17,4 @@ public class JwtGenerator {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
-
 }
