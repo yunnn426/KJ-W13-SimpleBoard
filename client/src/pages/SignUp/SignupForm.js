@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Confetti from 'react-confetti';
 import JSConfetti from 'js-confetti';
+import { UrlContext } from '../../App';
 import '../../styles/signup.css'; 
 
 const jsConfetti = new JSConfetti(); // JSConfetti 인스턴스를 컴포넌트 외부에서 생성
 
 const SignupForm = () => {
+    const url = useContext(UrlContext);
+
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -28,7 +31,7 @@ const SignupForm = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://192.168.0.95:8090/signup', {
+            const response = await fetch(`${url}/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
