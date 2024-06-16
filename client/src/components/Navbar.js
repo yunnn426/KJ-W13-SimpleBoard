@@ -11,7 +11,7 @@ const Navbar = ({ nickname }) => {
     switch (location.pathname) {
       case "/home":
         return "Home";
-      case "/dashboard":
+      case "/board":
         return "Board";
       case "/chat":
         return "Chat";
@@ -50,6 +50,7 @@ const Navbar = ({ nickname }) => {
         </li>
       </ul>
       <ul className="navbar-center">
+
         <li>{getCurrentPage()}</li>
       </ul>
       <ul className="navbar-right">
@@ -59,6 +60,7 @@ const Navbar = ({ nickname }) => {
             Logout
           </button>
         </li>
+
       </ul>
     </nav>
   );

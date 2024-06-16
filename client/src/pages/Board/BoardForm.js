@@ -1,40 +1,41 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UrlContext } from "../../App";
-import Cookies from "js-cookie";
-import ModalForm from "../../components/CreateModal";
-import "../../styles/board.css";
-import Pagination from "./Pagination";
-import "../../styles/pagination.css";
+import React, { useState, useEffect, useContext } from 'react';
+import { UrlContext } from '../../App';
+import Cookies from 'js-cookie';
+import CreateModal from '../../components/CreateModal';
+import Pagination from './Pagination';
+import Post from '../../components/Post';
+import '../../styles/board.css';
+import '../../styles/pagination.css';
+import PostModal from '../../components/PostModal';
 
 const BoardForm = () => {
   const url = useContext(UrlContext);
-  const token = Cookies.get("accessToken");
+  const token = Cookies.get('accessToken');
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
-  const [sort, setSort] = useState("DESC");
+  const [sort, setSort] = useState('DESC');
   const [totalItems, setTotalItems] = useState(15);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalItems / size));
+  const [selectedPost, setSelectedPost] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("title");
 
   const fetchBoard = async () => {
     const queryParams = {
-      page,
-      size,
-      sort,
-      searchQuery,
-      filter
+      page: 0,
+      size: 5,
+      sort: 'DESC',
     };
 
     try {
       const response = await fetch(`${url}/board/posts`, {
-        method: "POST",
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(queryParams),
       });
@@ -50,8 +51,8 @@ const BoardForm = () => {
         alert(`Board fetch failed: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error fetching board:", error);
-      alert("An error occured while fetching board.");
+      console.error('Error fetching board:', error);
+      // alert('An error occured while fetching board.');
     }
   };
 
@@ -59,24 +60,41 @@ const BoardForm = () => {
     fetchBoard();
   }, [page, size, sort]);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    fetchBoard();
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   const handlePostSuccess = () => {
     fetchBoard();
   };
+
+  // 글쓰기용 모달창
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
+
+  // 게시글 한 개 보기
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const viewPost = (postId) => {
+    setSelectedPost(postId);
+    openPostModal();
+
+  };
+
+  const openPostModal = () => {
+    setIsPostModalOpen(true);
+  };
+
+  const closePostModal = () => {
+    setIsPostModalOpen(false);
+  };
+
+  const handleDeleteSuccess = () => {
+    fetchBoard();
+  }
 
   return (
     <div className="page-container">
@@ -96,41 +114,19 @@ const BoardForm = () => {
         </form>
       </div>
       <div className="board-container">
-        <table className="board-table">
-          <thead>
-            <tr>
-              <th>번호</th>
-              <th>제목</th>
-              <th>이름</th>
-              <th>아이디</th>
-              <th>작성일</th>
-              <th>조회수</th>
-            </tr>
-          </thead>
-          <tbody>
-            {posts.map((post, index) => (
-              <tr key={post.id}>
-                <td>{totalItems - (page * size + index)}</td>
-                <td>{post.title}</td>
-                <td>{post.writer}</td>
-                <td>{post.userId}</td>
-                <td>{post.date}</td>
-                <td>{post.views}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="board-actions">
-          <button className="delete-button">삭제</button>
-          <button className="create-button" onClick={openModal}>글쓰기</button>
-        </div>
+
+        <button className="button" onClick={openCreateModal}>
+          글쓰기
+        </button>
+        {posts.map((post) => (
+          <Post key={post.id} value={post} onClick={() => viewPost(post.postId)} />
+        ))}
       </div>
-      <ModalForm isOpen={isModalOpen} onClose={closeModal} onPostSuccess={handlePostSuccess} />
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+      <CreateModal isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
+      {isPostModalOpen && (
+        <PostModal isOpen={isPostModalOpen} onClose={closePostModal} onDeleteSuccess={handleDeleteSuccess} postId={selectedPost}></PostModal>
+      )}
+      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 };

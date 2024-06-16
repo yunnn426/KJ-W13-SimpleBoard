@@ -39,4 +39,28 @@ public class Comment extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	public void setMember(Member member) {
+		this.member = member;
+		if (!member.getCommentList().contains(this)) {
+			member.getCommentList().add(this);
+		}
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
+		if (!post.getCommentList().contains(this)) {
+			post.getCommentList().add(this);
+		}
+	}
+
+	public void deleteComment() {
+		Post post = this.getPost();
+		if (post != null) {
+			post.getCommentList().remove(this);
+		}
+		Member member = this.getMember();
+		if (member != null) {
+			member.getCommentList().remove(this);
+		}
+	}
 }

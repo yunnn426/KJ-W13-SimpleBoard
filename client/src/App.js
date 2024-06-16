@@ -17,20 +17,20 @@ export const UrlContext = createContext();
 
 const decodeToken = (token) => {
   if (!token) {
-    throw new Error("No token provided");
+    throw new Error('No token provided');
   }
 
-  const base64Url = token.split(".")[1];
+  const base64Url = token.split('.')[1];
   if (!base64Url) {
-    throw new Error("Invalid token");
+    throw new Error('Invalid token');
   }
 
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const jsonPayload = decodeURIComponent(
     atob(base64)
-      .split("")
-      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-      .join("")
+      .split('')
+      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+      .join('')
   );
 
   return JSON.parse(jsonPayload);
@@ -42,16 +42,16 @@ const App = () => {
   const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get("accessToken");
+    const token = Cookies.get('accessToken');
     if (token) {
       try {
         setIsLoggedIn(true);
         const decodedToken = decodeToken(token);
         setNickname(decodedToken.nickname);
       } catch (error) {
-        console.error("Error decoding token:", error);
+        console.error('Error decoding token:', error);
         setIsLoggedIn(false);
-        setNickname("");
+        setNickname('');
       }
     }
   }, []);
@@ -73,10 +73,7 @@ const App = () => {
               isLoggedIn ? (
                 <Navigate to="/home" />
               ) : (
-                <LoginPage
-                  setIsLoggedIn={setIsLoggedIn}
-                  setNickname={setNickname}
-                />
+                <LoginPage setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />
               )
             }
           />
@@ -99,6 +96,7 @@ const App = () => {
               )
             }
           />
+
         </Routes>
       </Router>
     </UrlContext.Provider>

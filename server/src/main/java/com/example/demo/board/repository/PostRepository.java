@@ -15,4 +15,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 			+ "where p.postId = :postId"
 	)
 	Optional<Post> findByIdWithWriter(@Param("postId") Long id);
+
+	@Query("select p from Post p "
+		+ "where p.postId = :postId"
+	)
+	Optional<Post> findByIdWithCommentList(@Param("postId") Long id);
 }
