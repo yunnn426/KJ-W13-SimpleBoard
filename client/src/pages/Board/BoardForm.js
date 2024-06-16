@@ -1,41 +1,39 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { UrlContext } from '../../App';
-import Cookies from 'js-cookie';
-import CreateModal from '../../components/CreateModal';
-import Pagination from './Pagination';
-import Post from '../../components/Post';
-import '../../styles/board.css';
-import '../../styles/pagination.css';
-import PostModal from '../../components/PostModal';
+import React, { useState, useEffect, useContext } from "react";
+import { UrlContext } from "../../App";
+import Cookies from "js-cookie";
+import CreateModal from "../../components/CreateModal";
+import Pagination from "./Pagination";
+import Post from "../../components/Post";
+import "../../styles/board.css";
+import "../../styles/pagination.css";
+import PostModal from "../../components/PostModal";
 
 const BoardForm = () => {
   const url = useContext(UrlContext);
-  const token = Cookies.get('accessToken');
+  const token = Cookies.get("accessToken");
 
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
-  const [sort, setSort] = useState('DESC');
+  const [sort, setSort] = useState("DESC");
   const [totalItems, setTotalItems] = useState(15);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalItems / size));
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState("title");
-
+  // 게시글 불러오기
   const fetchBoard = async () => {
     const queryParams = {
       page: 0,
       size: 5,
-      sort: 'DESC',
+      sort: "DESC",
     };
 
     try {
       const response = await fetch(`${url}/board/posts`, {
-        method: 'POST',
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(queryParams),
       });
@@ -51,7 +49,7 @@ const BoardForm = () => {
         alert(`Board fetch failed: ${errorData.message}`);
       }
     } catch (error) {
-      console.error('Error fetching board:', error);
+      console.error("Error fetching board:", error);
       // alert('An error occured while fetching board.');
     }
   };
@@ -59,7 +57,6 @@ const BoardForm = () => {
   useEffect(() => {
     fetchBoard();
   }, [page, size, sort]);
-
 
   const handlePostSuccess = () => {
     fetchBoard();
@@ -81,7 +78,6 @@ const BoardForm = () => {
   const viewPost = (postId) => {
     setSelectedPost(postId);
     openPostModal();
-
   };
 
   const openPostModal = () => {
@@ -94,39 +90,40 @@ const BoardForm = () => {
 
   const handleDeleteSuccess = () => {
     fetchBoard();
-  }
+  };
 
   return (
-    <div className="page-container">
-      <div className="board-header">
-        <form onSubmit={handleSearch}>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="title">제목</option>
-            <option value="writer">작성자</option>
-          </select>
-          <input
-            type="text"
-            placeholder="검색어를 입력해주세요."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit">검색</button>
-        </form>
-      </div>
+    <div>
       <div className="board-container">
-
         <button className="button" onClick={openCreateModal}>
           글쓰기
         </button>
         {posts.map((post) => (
-          <Post key={post.id} value={post} onClick={() => viewPost(post.postId)} />
+          <Post
+            key={post.id}
+            value={post}
+            onClick={() => viewPost(post.postId)}
+          />
         ))}
       </div>
-      <CreateModal isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
+      <CreateModal
+        isOpen={isCreateModalOpen}
+        onClose={closeCreateModal}
+        onPostSuccess={handlePostSuccess}
+      />
       {isPostModalOpen && (
-        <PostModal isOpen={isPostModalOpen} onClose={closePostModal} onDeleteSuccess={handleDeleteSuccess} postId={selectedPost}></PostModal>
+        <PostModal
+          isOpen={isPostModalOpen}
+          onClose={closePostModal}
+          onDeleteSuccess={handleDeleteSuccess}
+          postId={selectedPost}
+        ></PostModal>
       )}
-      <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
     </div>
   );
 };
