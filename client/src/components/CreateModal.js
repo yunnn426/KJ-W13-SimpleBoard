@@ -90,4 +90,5 @@ const CreateModal = ({ isOpen, onClose, onPostSuccess }) => {
     </div>
   );
 };
+
 export default CreateModal;

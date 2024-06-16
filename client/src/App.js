@@ -1,12 +1,17 @@
-import React, { useState, useEffect, createContext } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import SignupPage from '../src/pages/SignUp/SignupPage';
-import LoginPage from '../src/pages/Login/LoginPage';
-import HomePage from '../src/pages/Home/HomePage';
-import BoardPage from '../src/pages/Board/BoardPage';
-import Cookies from 'js-cookie';
-import Navbar from '../src/components/Navbar';
-// import {jwtDecode} from 'jwt-decode';
+import React, { useState, useEffect, createContext } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import SignupPage from "../src/pages/SignUp/SignupPage";
+import LoginPage from "../src/pages/Login/LoginPage";
+import HomePage from "../src/pages/Home/HomePage";
+import BoardPage from "../src/pages/Board/BoardPage";
+import Cookies from "js-cookie";
+import Navbar from "./components/Navbar";
+import ChatPage from "../src/pages/Chat/ChatPage";
 
 export const UrlContext = createContext();
 
@@ -33,15 +38,15 @@ const decodeToken = (token) => {
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [nickname, setNickname] = useState('');
-  console.log(setNickname);
+  const [nickname, setNickname] = useState("");
+  const [showChat, setShowChat] = useState(false);
+
   useEffect(() => {
     const token = Cookies.get('accessToken');
     if (token) {
       try {
         setIsLoggedIn(true);
         const decodedToken = decodeToken(token);
-        console.log(decodedToken.nickname);
         setNickname(decodedToken.nickname);
       } catch (error) {
         console.error('Error decoding token:', error);
@@ -51,10 +56,16 @@ const App = () => {
     }
   }, []);
 
+  const handleShowChat = () => {
+    setShowChat(true);
+  };
+
   return (
-    <UrlContext.Provider value="http://localhost:8080">
+    <UrlContext.Provider value="http://192.168.0.136:8080">
       <Router>
-        {isLoggedIn && <Navbar nickname={nickname} />}
+        {isLoggedIn && (
+          <Navbar nickname={nickname} onChatClick={handleShowChat} />
+        )}
         <Routes>
           <Route
             path="/"
@@ -67,8 +78,25 @@ const App = () => {
             }
           />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/" />} />
-          <Route path="/board" element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />} />
+          <Route
+            path="/home"
+            element={isLoggedIn ? <HomePage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/board"
+            element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/chat"
+            element={
+              isLoggedIn ? (
+                <ChatPage nickname={nickname} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
         </Routes>
       </Router>
     </UrlContext.Provider>

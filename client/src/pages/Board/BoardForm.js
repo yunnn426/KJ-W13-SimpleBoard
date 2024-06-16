@@ -20,7 +20,9 @@ const BoardForm = () => {
   const [totalPages, setTotalPages] = useState(Math.ceil(totalItems / size));
   const [selectedPost, setSelectedPost] = useState(null);
 
-  // 게시글 불러오기
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("title");
+
   const fetchBoard = async () => {
     const queryParams = {
       page: 0,
@@ -58,6 +60,7 @@ const BoardForm = () => {
     fetchBoard();
   }, [page, size, sort]);
 
+
   const handlePostSuccess = () => {
     fetchBoard();
   };
@@ -78,6 +81,7 @@ const BoardForm = () => {
   const viewPost = (postId) => {
     setSelectedPost(postId);
     openPostModal();
+
   };
 
   const openPostModal = () => {
@@ -93,8 +97,24 @@ const BoardForm = () => {
   }
 
   return (
-    <div>
+    <div className="page-container">
+      <div className="board-header">
+        <form onSubmit={handleSearch}>
+          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
+          </select>
+          <input
+            type="text"
+            placeholder="검색어를 입력해주세요."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit">검색</button>
+        </form>
+      </div>
       <div className="board-container">
+
         <button className="button" onClick={openCreateModal}>
           글쓰기
         </button>

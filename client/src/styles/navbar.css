@@ -1,47 +1,103 @@
 /* Navbar 전체 스타일 */
 .navbar {
-    background-color: #333; /* 배경색 설정 */
-    height: 60px; /* 높이 설정 */
-    width: 100%; /* 전체 너비 */
-    display: flex; /* 플렉스 박스 레이아웃 사용 */
-    justify-content: space-between; /* 좌우 요소 분배 */
-    align-items: center; /* 세로 중앙 정렬 */
-    padding: 0 20px; /* 좌우 패딩 */
-    font-size: 1.2rem; /* 글꼴 크기 설정 */
-    position: fixed; /* 화면 상단에 고정 */
-    top: 0; /* 상단에 위치 */
-    left: 0; /* 좌측에 위치 */
-    z-index: 1000; /* 다른 요소들 위에 위치 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝 그림자 효과 */
-    box-sizing: border-box; /* 패딩과 보더를 포함한 너비 계산 */
+  background-color: #333; /* 배경색 설정 */
+  height: 60px; /* 높이 설정 */
+  width: 100%; /* 전체 너비 */
+  display: flex; /* 플렉스 박스 레이아웃 사용 */
+  justify-content: space-between; /* 좌우 요소 분배 */
+  align-items: center; /* 세로 중앙 정렬 */
+  padding: 0 20px; /* 좌우 패딩 */
+  font-size: 1.2rem; /* 글꼴 크기 설정 */
+  position: fixed; /* 화면 상단에 고정 */
+  top: 0; /* 상단에 위치 */
+  left: 0; /* 좌측에 위치 */
+  z-index: 1000; /* 다른 요소들 위에 위치 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝 그림자 효과 */
+  box-sizing: border-box; /* 패딩과 보더를 포함한 너비 계산 */
 }
 
 /* Navbar 왼쪽 정렬 */
 .navbar-left {
-    list-style: none; /* 기본 리스트 스타일 제거 */
-    margin: 0; /* 외부 여백 제거 */
-    padding: 0; /* 내부 여백 제거 */
-    display: flex; /* 플렉스 박스 레이아웃 사용 */
-    align-items: center; /* 세로 중앙 정렬 */
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
+  display: flex; /* 플렉스 박스 레이아웃 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
+}
+
+.navbar-center {
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  color: white;
+  margin: 0 auto; /* 중앙 정렬을 위해 자동 마진 */
+  padding: 0; /* 내부 여백 제거 */
+  display: flex; /* 플렉스 박스 레이아웃 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
 
 /* Navbar 오른쪽 정렬 */
 .navbar-right {
-    list-style: none; /* 기본 리스트 스타일 제거 */
-    margin: 0; /* 외부 여백 제거 */
-    padding: 0; /* 내부 여백 제거 */
-    display: flex; /* 플렉스 박스 레이아웃 사용 */
-    align-items: center; /* 세로 중앙 정렬 */
+  list-style: none; /* 기본 리스트 스타일 제거 */
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
+  display: flex; /* 플렉스 박스 레이아웃 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
 }
 
 /* Navbar 항목 스타일 */
-.navbar-left li, .navbar-right li {
-    color: #fff; /* 텍스트 색상 */
-    margin-left: 20px; /* 왼쪽 여백 */
+.navbar-left li,
+.navbar-right li {
+  color: #fff; /* 텍스트 색상 */
+  margin-left: 20px; /* 왼쪽 여백 */
 }
 
 /* Navbar 항목 호버 효과 */
-.navbar-left li:hover, .navbar-right li:hover {
-    color: #ccc; /* 호버 시 텍스트 색상 변경 */
-    transition: color 0.3s ease; /* 부드러운 전환 효과 */
+.navbar-left li:hover,
+.navbar-right li:hover {
+  color: #ccc; /* 호버 시 텍스트 색상 변경 */
+  transition: color 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.logout-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  width: 100px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.logout-button:hover {
+  background-color: #ff0000;
+}
+
+.chat-button {
+  background-color: rgb(248, 248, 62);
+  color: black;
+  border: none;
+  width: 100px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.chat-button:hover {
+  background-color: rgb(248, 248, 62);
+}
+
+.home-button {
+  background-color: rgb(102, 244, 102);
+  color: black;
+  border: none;
+  width: 100px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.home-button:hover {
+  background-color: rgb(102, 244, 102);
 }

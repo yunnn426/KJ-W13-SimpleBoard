@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../styles/pagination.css';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     const maxPageNumbers = 5;
@@ -22,7 +23,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 onClick={() => onPageChange(currentPage - 1)} 
                 disabled={currentPage === 1}
             >
-                &laquo;
+                이전
             </button>
             {pages.map((page) => (
                 <button
@@ -37,7 +38,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 onClick={() => onPageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages}
             >
-                &raquo;
+                다음
             </button>
         </div>
     );
