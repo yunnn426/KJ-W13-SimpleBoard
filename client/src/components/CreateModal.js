@@ -44,6 +44,11 @@ const ModalForm = ({ isOpen, onClose, onPostSuccess }) => {
       console.error("Error:", error);
       alert('An error occurred while posting. Please try again.');
     }
+
+    setFormData({
+      title : " ",
+      content : ""
+    });
   };
 
   if (!isOpen) return null;

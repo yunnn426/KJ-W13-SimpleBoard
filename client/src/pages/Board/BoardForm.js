@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UrlContext } from "../../App";
 import Cookies from "js-cookie";
-import ModalForm from "../../components/ModalForm";
+import ModalForm from "../../components/CreateModal";
 import "../../styles/board.css";
 import Pagination from "./Pagination";
 import "../../styles/pagination.css";
@@ -17,12 +17,16 @@ const BoardForm = () => {
   const [totalItems, setTotalItems] = useState(15);
   const [totalPages, setTotalPages] = useState(Math.ceil(totalItems / size));
 
-  // 게시글 불러오기
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState("title");
+
   const fetchBoard = async () => {
     const queryParams = {
       page,
       size,
       sort,
+      searchQuery,
+      filter
     };
 
     try {
@@ -55,7 +59,11 @@ const BoardForm = () => {
     fetchBoard();
   }, [page, size, sort]);
 
-  // 글쓰기용 모달창
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchBoard();
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -67,21 +75,55 @@ const BoardForm = () => {
   };
 
   const handlePostSuccess = () => {
-    fetchBoard(); 
+    fetchBoard();
   };
 
   return (
-    <div>
+    <div className="page-container">
+      <div className="board-header">
+        <form onSubmit={handleSearch}>
+          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="title">제목</option>
+            <option value="writer">작성자</option>
+          </select>
+          <input
+            type="text"
+            placeholder="검색어를 입력해주세요."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit">검색</button>
+        </form>
+      </div>
       <div className="board-container">
-        <button className="button" onClick={openModal}>
-          글쓰기
-        </button>
-        {posts.map((post) => (
-          <div key={post.id}>
-            <h2>{post.title}</h2>
-            <p>{post.writer}</p>
-          </div>
-        ))}
+        <table className="board-table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>이름</th>
+              <th>아이디</th>
+              <th>작성일</th>
+              <th>조회수</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post, index) => (
+              <tr key={post.id}>
+                <td>{totalItems - (page * size + index)}</td>
+                <td>{post.title}</td>
+                <td>{post.writer}</td>
+                <td>{post.userId}</td>
+                <td>{post.date}</td>
+                <td>{post.views}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="board-actions">
+          <button className="delete-button">삭제</button>
+          <button className="create-button" onClick={openModal}>글쓰기</button>
+        </div>
       </div>
       <ModalForm isOpen={isModalOpen} onClose={closeModal} onPostSuccess={handlePostSuccess} />
       <Pagination

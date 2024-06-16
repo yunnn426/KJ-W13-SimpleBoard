@@ -11,7 +11,7 @@ import HomePage from "../src/pages/Home/HomePage";
 import BoardPage from "../src/pages/Board/BoardPage";
 import Cookies from "js-cookie";
 import Navbar from "./components/Navbar";
-// import {jwtDecode} from 'jwt-decode';
+import ChatPage from "../src/pages/Chat/ChatPage";
 
 export const UrlContext = createContext();
 
@@ -39,14 +39,14 @@ const decodeToken = (token) => {
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [nickname, setNickname] = useState("");
-  console.log(setNickname);
+  const [showChat, setShowChat] = useState(false);
+
   useEffect(() => {
     const token = Cookies.get("accessToken");
     if (token) {
       try {
         setIsLoggedIn(true);
         const decodedToken = decodeToken(token);
-        console.log(decodedToken.nickname);
         setNickname(decodedToken.nickname);
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -56,10 +56,16 @@ const App = () => {
     }
   }, []);
 
+  const handleShowChat = () => {
+    setShowChat(true);
+  };
+
   return (
-    <UrlContext.Provider value="http://192.168.0.95:8090">
+    <UrlContext.Provider value="http://192.168.0.136:8080">
       <Router>
-        {isLoggedIn && <Navbar nickname={nickname} />}
+        {isLoggedIn && (
+          <Navbar nickname={nickname} onChatClick={handleShowChat} />
+        )}
         <Routes>
           <Route
             path="/"
@@ -82,6 +88,16 @@ const App = () => {
           <Route
             path="/board"
             element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/chat"
+            element={
+              isLoggedIn ? (
+                <ChatPage nickname={nickname} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
         </Routes>
       </Router>

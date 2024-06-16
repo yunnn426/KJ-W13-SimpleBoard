@@ -1,24 +1,24 @@
 import React from "react";
-import '../../styles/home.css'; 
+import "../../styles/home.css";
 import { useNavigate } from "react-router-dom";
 
 const HomeForm = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleGameClick = () => {
-        navigate('/game');
-    }
+  const handleGameClick = () => {
+    navigate("/chat");
+  };
 
-    const handleBoardClick = () => {
-        navigate('/board');
-    }
+  const handleBoardClick = () => {
+    navigate("/board");
+  };
 
-    return (
-        <div className="home-container">
-            <button onClick={handleGameClick}>끝말 잇기</button> 
-            <button onClick={handleBoardClick}>게시판</button> 
-        </div>
-    )
+  return (
+    <div className="home-container">
+      <button onClick={handleGameClick}>포켓몬</button>
+      <button onClick={handleBoardClick}>게시판</button>
+    </div>
+  );
 };
 
 export default HomeForm;
