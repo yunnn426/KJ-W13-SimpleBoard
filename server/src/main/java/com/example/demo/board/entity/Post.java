@@ -7,6 +7,7 @@ import com.example.demo.board.dto.UpdatePostDto;
 import com.example.demo.config.BaseTimeEntity;
 import com.example.demo.member.entity.Member;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,11 +42,11 @@ public class Post extends BaseTimeEntity {
 	@JoinColumn(name = "member_id")
 	private Member writer;
 
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<Comment> commentList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "post")
+	@OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	@Builder.Default
 	private List<LikeTable> likeList = new ArrayList<>();
 
