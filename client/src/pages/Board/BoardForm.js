@@ -50,7 +50,7 @@ const BoardForm = () => {
       }
     } catch (error) {
       console.error('Error fetching board:', error);
-      alert('An error occured while fetching board.');
+      // alert('An error occured while fetching board.');
     }
   };
 
@@ -88,6 +88,10 @@ const BoardForm = () => {
     setIsPostModalOpen(false);
   };
 
+  const handleDeleteSuccess = () => {
+    fetchBoard();
+  }
+
   return (
     <div>
       <div className="board-container">
@@ -100,7 +104,7 @@ const BoardForm = () => {
       </div>
       <CreateModal isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
       {isPostModalOpen && (
-        <PostModal isOpen={isPostModalOpen} onClose={closePostModal} postId={selectedPost}></PostModal>
+        <PostModal isOpen={isPostModalOpen} onClose={closePostModal} onDeleteSuccess={handleDeleteSuccess} postId={selectedPost}></PostModal>
       )}
       <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </div>

@@ -24,3 +24,10 @@ body {
 p {
   color: #797979;
 }
+
+.delete {
+  float: right;     /* 오른쪽으로 */
+  text-decoration: underline;
+  cursor: pointer;  /* 손가락 모양 */
+  color: #ff0000;
+}
