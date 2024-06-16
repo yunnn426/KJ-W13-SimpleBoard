@@ -63,7 +63,4 @@ public class Comment extends BaseTimeEntity {
 			member.getCommentList().remove(this);
 		}
 	}
-
-
-
 }

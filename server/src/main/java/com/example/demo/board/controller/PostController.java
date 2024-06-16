@@ -59,12 +59,11 @@ public class PostController {
 
 	@DeleteMapping("/delete/{postId}")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public ResponseEntity<Void> deletePost(
+	public void deletePost(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@PathVariable("postId") Long postId
 	) {
 		postService.deletePost(postId, userDetails.getUsername());
-		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/posts")
