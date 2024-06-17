@@ -1,3 +1,10 @@
+@counter-style space-counter {
+  system: cyclic;
+  symbols: '🚀' '🛸' '🛰️';
+  pad: 2 2;
+  suffix: ' ';
+}
+
 .modal {
   display: flex;
   position: fixed;
@@ -90,4 +97,41 @@
 
 hr {
   border-top: 1px dashed #bbb;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.like-button i {
+  margin-right: 5px;
+  color: #797979;
+}
+
+.like-button.liked i {
+  color: #ff0000;
+}
+
+.like-count {
+  font-size: 16px;
+}
+
+.like-list {
+  margin-top: 20px;
+}
+
+.like-list h3 {
+  margin-top: 0;
+}
+
+.like-list ul {
+  list-style-type: space-counter;
+  padding: 10;
+  margin: 0;
+}
+
+.like-list li {
+  padding: 5px 0;
 }
