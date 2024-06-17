@@ -39,20 +39,10 @@ p {
   margin-top: 20px;
 }
 
-.like-button {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+.like-list {
+  margin-top: 20px;
 }
 
-.like-button i {
-  margin-right: 5px;
-}
-
-.like-button.liked i {
-  color: #ff0000;
-}
-
-.like-count {
-  font-size: 16px;
+.comment-list {
+  margin-top: 20px;
 }

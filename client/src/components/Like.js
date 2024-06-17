@@ -9,9 +9,8 @@ const Like = ({ postId, likeCount, showLikeList, setShowLikeList }) => {
 
   const postBody = {
     postId: postId,
-    commentOrLike: 'LIKE',
   };
-  const { postData } = usePost(`${url}/board/reaction`, postBody);
+  const { postData } = usePost(`${url}/board/reaction/like`, postBody);
   const handleLike = async () => {
     const response = await postData();
 
