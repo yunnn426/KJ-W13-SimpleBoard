@@ -1,6 +1,7 @@
 package com.example.demo.board.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,20 +89,19 @@ public class PostService {
 
 	@Transactional
 	public void createOrDeleteLike(CreateCommentOrLikeDto createCommentOrLikeDto, String username) {
-		if (postRepository.existsLikeWithUsername(createCommentOrLikeDto.getPostId(), username)) {
-			LikeTable likeTable = likeJpaRepository.findByUsername(createCommentOrLikeDto.getPostId(), username)
-				.orElseThrow(() -> new IllegalArgumentException("Like not found"));
+		Optional<LikeTable> likeTableOptional = likeJpaRepository.findByUsername(createCommentOrLikeDto.getPostId(), username);
+		if (likeTableOptional.isPresent()) {
+			LikeTable likeTable = likeTableOptional.get();
 			likeTable.deleteLike();
 			likeJpaRepository.delete(likeTable);
-			return;
+		} else {
+			Member member = memberRepository.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("Username : " + username + " not found"));
+			Post post = postRepository.findByIdWithCommentList(createCommentOrLikeDto.getPostId())
+				.orElseThrow(() -> new IllegalArgumentException("PostId : " + createCommentOrLikeDto.getPostId() + " not found"));
+			LikeTable like = CreateCommentOrLikeDto.toLikeEntity(createCommentOrLikeDto, member, post);
+			likeJpaRepository.save(like);
 		}
-		Member member = memberRepository.findByUsername(username)
-			.orElseThrow(() -> new IllegalArgumentException("Username : " + username + " not found"));
-		Post post = postRepository.findByIdWithCommentList(createCommentOrLikeDto.getPostId())
-			.orElseThrow(() -> new IllegalArgumentException("PostId : " + createCommentOrLikeDto.getPostId() + " not found"));
-
-		LikeTable like = CreateCommentOrLikeDto.toLikeEntity(createCommentOrLikeDto, member, post);
-		likeJpaRepository.save(like);
 	}
 
 	@Transactional

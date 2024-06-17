@@ -11,6 +11,7 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -19,8 +20,11 @@ import lombok.RequiredArgsConstructor;
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class SpringConfig {
 
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Bean
-	public JPAQueryFactory jpaQueryFactory(EntityManager em) {
-		return new JPAQueryFactory(em);
+	public JPAQueryFactory jpaQueryFactory() {
+		return new JPAQueryFactory(entityManager);
 	}
 }

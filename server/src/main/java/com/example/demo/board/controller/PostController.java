@@ -98,8 +98,6 @@ public class PostController {
 		@Valid @RequestBody CreateCommentOrLikeDto createCommentOrLikeDto
 	) {
 		String username = userDetails.getUsername();
-		postService.createOrDeleteLike(createCommentOrLikeDto, username);
+		postService.createComment(createCommentOrLikeDto, username);
 	}
-
-
 }

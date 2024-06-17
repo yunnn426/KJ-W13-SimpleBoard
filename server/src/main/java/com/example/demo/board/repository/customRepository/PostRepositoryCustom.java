@@ -7,10 +7,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 import com.example.demo.board.dto.RequestSearchPostDto;
 import com.example.demo.board.entity.Post;
 
-@NoRepositoryBean
 public interface PostRepositoryCustom {
 
 	Page<Post> searchPost(RequestSearchPostDto requestSearchPostDto, Pageable pageable);
-	boolean existsLikeWithUsername(Long postId, String username);
 
 }
