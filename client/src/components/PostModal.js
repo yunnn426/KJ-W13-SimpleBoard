@@ -3,9 +3,11 @@ import Cookies from 'js-cookie';
 import { UrlContext } from '../App';
 import useDelete from '../hooks/useDelete';
 import usePost from '../hooks/usePost';
-import '../styles/modal.css';
-import LikeList from './LikeList';
 import Like from './Like';
+import LikeList from './LikeList';
+import Comment from './Comment';
+import CommentList from './CommentList';
+import '../styles/modal.css';
 
 const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
   const url = useContext(UrlContext);
@@ -16,11 +18,16 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
 
   /* 좋아요 */
   const [likeList, setLikeList] = useState([]);
-  const [showLikeList, setShowLikeList] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [showLikeList, setShowLikeList] = useState(false);
+
+  /* 댓글 */
+  const [commentList, setCommentList] = useState([]);
+  const [commentCount, setCommentCount] = useState(0);
 
   // 여기서 hook으로 받아오려 하니까 Promise Pending 문제 발생
   const fetchPost = async () => {
+    console.log('Fetch!');
     try {
       const response = await fetch(`${url}/board/posts/${postId}`, {
         method: 'GET',
@@ -33,11 +40,24 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
       if (response.ok) {
         const jsonData = await response.json();
         setGetData(jsonData);
+
+        // 좋아요 관련 상태값 변경
         setLikeList(jsonData.responsePostLikeDtoList);
         setLikeCount(jsonData.responsePostLikeDtoList.length);
+        // 댓글 관련 상태값 변경
+        setCommentList(jsonData.responsePostCommentDtoList);
+        setCommentCount(jsonData.responsePostCommentDtoList.length);
+        // console.log(commentList);
+        // console.log(commentCount);
+      } else {
+        const errorData = await response.json();
+        console.log(errorData);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Error fetching post: ', error);
+    }
   };
+
   useEffect(() => {
     fetchPost();
   }, [url, token]);
@@ -60,6 +80,11 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
     }
   };
 
+  /* 댓글 등록 */
+  const handleCommentSuccess = () => {
+    fetchPost();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -79,15 +104,21 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
             <span>수정시간: {getData.lastModifiedDate}</span>
           </div>
           <hr />
-          <span className="delete" onClick={handleDelete}>
-            삭제
-          </span>
           <div className="post-content">
             <div>{getData.content}</div>
+            <span className="delete" onClick={handleDelete}>
+              삭제
+            </span>
           </div>
           <div className="like-list">
             <Like postId={postId} likeCount={likeCount} showLikeList={showLikeList} setShowLikeList={setShowLikeList} />
             <LikeList showLikeList={showLikeList} likeList={likeList} />
+          </div>
+          <div className="comment-section">
+            <div className="comment-list">
+              <CommentList commentCount={commentCount} commentList={commentList} />
+              <Comment postId={postId} onCommentSuccess={handleCommentSuccess} />
+            </div>
           </div>
         </div>
         <div className="modal-footer"></div>

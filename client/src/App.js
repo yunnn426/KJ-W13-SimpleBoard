@@ -57,20 +57,11 @@ const App = () => {
   };
 
   return (
-    <UrlContext.Provider value="http://192.168.0.136:8080">
+    <UrlContext.Provider value="http://localhost:8080">
       <Router>
         {isLoggedIn && <Navbar nickname={nickname} onChatClick={handleShowChat} />}
         <Routes>
-          <Route
-            path="/"
-            element={
-              isLoggedIn ? (
-                <Navigate to="/home" />
-              ) : (
-                <LoginPage setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />
-              )
-            }
-          />
+          <Route path="/" element={isLoggedIn ? <Navigate to="/home" /> : <LoginPage setIsLoggedIn={setIsLoggedIn} setNickname={setNickname} />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/home" element={isLoggedIn ? <HomePage /> : <Navigate to="/" />} />
           <Route path="/board" element={isLoggedIn ? <BoardPage /> : <Navigate to="/" />} />

@@ -17,20 +17,3 @@
   font-size: 16px;
 }
 
-.like-list {
-  margin-top: 20px;
-}
-
-.like-list h3 {
-  margin-top: 0;
-}
-
-.like-list ul {
-  list-style-type: space-counter;
-  padding: 10;
-  margin: 0;
-}
-
-.like-list li {
-  padding: 5px 0;
-}

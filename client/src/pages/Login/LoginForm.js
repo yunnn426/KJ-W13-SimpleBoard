@@ -41,7 +41,7 @@ const LoginForm = ({ setIsLoggedIn, setNickname }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(`${url}/signin`);
+    // console.log(`${url}/signin`);
     try {
       const response = await fetch(`${url}/signin`, {
         method: 'POST',

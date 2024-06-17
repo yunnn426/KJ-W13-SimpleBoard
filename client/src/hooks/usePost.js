@@ -16,6 +16,14 @@ const usePost = (url, postBody) => {
     });
     setData(response);
 
+    // return void인 경우
+    if (response.ok) {
+      return true;
+    }
+    if (!response.ok) {
+      return false;
+    }
+
     return data;
   };
 

@@ -1,0 +1,49 @@
+@counter-style comment-counter {
+  system: cyclic;
+  symbols: '💬';
+  prefix: '';
+  suffix: ' ';
+}
+
+.comment-form {
+  display: flex; /* 요소 수평 배치 */
+  align-items: center;
+}
+
+.comment-form input {
+  flex: 3;
+}
+
+.comment-form button {
+  flex: 1;
+
+  background-color: #79a5d9;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+.comment-section {
+  margin-top: 0.5rem;
+  max-height: 200px; /* 스크롤 가능 최대 높이 */
+  overflow-y: auto; /* 세로 스크롤 */
+  boarder: 1px solid #ddd; /* 경계선 */
+}
+
+.comment-list {
+  list-style-type: none;
+}
+
+.comment-list ul {
+  list-style-type: comment-counter;
+  padding-left: 30px;
+}
+
+.comment-list li {
+  margin-botton: 0.5rem;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-list p {
+  font-size: 0.8rem;
+}
