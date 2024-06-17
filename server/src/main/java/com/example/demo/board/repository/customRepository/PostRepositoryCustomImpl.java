@@ -1,16 +1,20 @@
-package com.example.demo.board.repository;
+package com.example.demo.board.repository.customRepository;
 
+import static com.example.demo.board.entity.QLikeTable.*;
 import static com.example.demo.board.entity.QPost.*;
+import static com.example.demo.member.entity.QMember.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.board.dto.RequestSearchPostDto;
 import com.example.demo.board.entity.Post;
+import com.example.demo.board.entity.QLikeTable;
+import com.example.demo.member.entity.QMember;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class PostDslRepositoryImpl implements PostDslRepository{
+public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
 	public JPAQueryFactory jpaQueryFactory;
 
@@ -27,13 +31,30 @@ public class PostDslRepositoryImpl implements PostDslRepository{
 	public Page<Post> searchPost(RequestSearchPostDto requestSearchPostDto, Pageable pageable) {
 		List<Post> posts = jpaQueryFactory
 			.selectFrom(post)
-			.leftJoin(post.writer)
+			.leftJoin(post.writer).fetchJoin()
 			.where(allLike(requestSearchPostDto))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		return null;
+		JPAQuery<Long> countQuery = jpaQueryFactory
+			.select(post.count())
+			.from(post)
+			.where(allLike(requestSearchPostDto));
+
+		return PageableExecutionUtils.getPage(posts, pageable, countQuery::fetchOne);
+	}
+
+	@Override
+	public boolean existsLikeWithUsername(Long postId, String username) {
+		return jpaQueryFactory
+			.selectOne()
+			.leftJoin(post.likeList, likeTable)
+			.leftJoin(likeTable.member, member)
+			.from(post)
+			.where(post.postId.eq(postId)
+				.and(member.username.eq(username)))
+			.fetchFirst() != null;
 	}
 
 	private BooleanExpression nicknameLike(String nicknameCond) {

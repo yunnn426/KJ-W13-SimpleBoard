@@ -9,23 +9,21 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.board.dto.CommentOrLike;
 import com.example.demo.board.dto.CreateCommentOrLikeDto;
 import com.example.demo.board.dto.CreatePostDto;
-import com.example.demo.board.dto.ResponsePagePostDto;
 import com.example.demo.board.dto.PostPagingDto;
+import com.example.demo.board.dto.ResponsePagePostDto;
 import com.example.demo.board.dto.ResponsePostDto;
 import com.example.demo.board.dto.UpdatePostDto;
 import com.example.demo.board.entity.Comment;
 import com.example.demo.board.entity.LikeTable;
 import com.example.demo.board.entity.Post;
+import com.example.demo.board.repository.JpaRepository.CommentJpaRepository;
+import com.example.demo.board.repository.JpaRepository.LikeJpaRepository;
 import com.example.demo.board.repository.PostRepository;
-import com.example.demo.board.repository.CommentRepository;
-import com.example.demo.board.repository.LikeRepository;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,8 +33,8 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final MemberRepository memberRepository;
-	private final LikeRepository likeRepository;
-	private final CommentRepository commentRepository;
+	private final LikeJpaRepository likeJpaRepository;
+	private final CommentJpaRepository commentJpaRepository;
 
 	@Transactional
 	public CreatePostDto createPost(CreatePostDto createPostDto, String username) {
@@ -81,42 +79,54 @@ public class PostService {
 	}
 
 	public ResponsePostDto getPostById(Long postId) {
-		List<Comment> commentList = commentRepository.findAllByPostId(postId);
-		List<LikeTable> likeList = likeRepository.findAllByPostId(postId);
+		List<Comment> commentList = commentJpaRepository.findAllByPostId(postId);
+		List<LikeTable> likeList = likeJpaRepository.findAllByPostId(postId);
 		Post post = postRepository.findByIdWithWriter(postId)
 			.orElseThrow(() -> new IllegalArgumentException("Post : " + postId + " not found"));
 		return ResponsePostDto.toDto(post, commentList, likeList);
 	}
 
 	@Transactional
-	public void createCommentOrLike(CreateCommentOrLikeDto createCommentOrLikeDto, String username) {
+	public void createOrDeleteLike(CreateCommentOrLikeDto createCommentOrLikeDto, String username) {
+		if (postRepository.existsLikeWithUsername(createCommentOrLikeDto.getPostId(), username)) {
+			LikeTable likeTable = likeJpaRepository.findByUsername(createCommentOrLikeDto.getPostId(), username)
+				.orElseThrow(() -> new IllegalArgumentException("Like not found"));
+			likeTable.deleteLike();
+			likeJpaRepository.delete(likeTable);
+			return;
+		}
 		Member member = memberRepository.findByUsername(username)
 			.orElseThrow(() -> new IllegalArgumentException("Username : " + username + " not found"));
 		Post post = postRepository.findByIdWithCommentList(createCommentOrLikeDto.getPostId())
 			.orElseThrow(() -> new IllegalArgumentException("PostId : " + createCommentOrLikeDto.getPostId() + " not found"));
 
-		if (createCommentOrLikeDto.getCommentOrLike() == CommentOrLike.COMMENT) {
-			Comment comment = CreateCommentOrLikeDto.toCommentEntity(createCommentOrLikeDto, member, post);
-			commentRepository.save(comment);
-		} else if (createCommentOrLikeDto.getCommentOrLike() == CommentOrLike.LIKE) {
-			LikeTable like = CreateCommentOrLikeDto.toLikeEntity(createCommentOrLikeDto, member, post);
-			likeRepository.save(like);
-		}
+		LikeTable like = CreateCommentOrLikeDto.toLikeEntity(createCommentOrLikeDto, member, post);
+		likeJpaRepository.save(like);
+	}
+
+	@Transactional
+	public void createComment(CreateCommentOrLikeDto createCommentOrLikeDto, String username) {
+		Member member = memberRepository.findByUsername(username)
+			.orElseThrow(() -> new IllegalArgumentException("Username : " + username + " not found"));
+		Post post = postRepository.findByIdWithCommentList(createCommentOrLikeDto.getPostId())
+			.orElseThrow(() -> new IllegalArgumentException("PostId : " + createCommentOrLikeDto.getPostId() + " not found"));
+		Comment comment = CreateCommentOrLikeDto.toCommentEntity(createCommentOrLikeDto, member, post);
+		commentJpaRepository.save(comment);
 	}
 
 	@Transactional
 	public void deleteComment(Long commentId) {
-		Comment comment = commentRepository.findByCommentId(commentId)
+		Comment comment = commentJpaRepository.findByCommentId(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("Comment not found"));
 		comment.deleteComment();
-		commentRepository.delete(comment);
+		commentJpaRepository.delete(comment);
 	}
 
 	@Transactional
 	public void deleteLike(Long commentId) {
-		LikeTable likeTable = likeRepository.findByLikeId(commentId)
+		LikeTable likeTable = likeJpaRepository.findByLikeId(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("Comment not found"));
 		likeTable.deleteLike();
-		likeRepository.delete(likeTable);
+		likeJpaRepository.delete(likeTable);
 	}
 }
