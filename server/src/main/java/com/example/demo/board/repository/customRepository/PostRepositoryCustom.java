@@ -7,7 +7,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 import com.example.demo.board.dto.RequestSearchPostDto;
 import com.example.demo.board.entity.Post;
 
-// dsl
 @NoRepositoryBean
 public interface PostRepositoryCustom {
 
