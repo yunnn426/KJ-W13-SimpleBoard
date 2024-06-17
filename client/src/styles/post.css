@@ -26,8 +26,33 @@ p {
 }
 
 .delete {
-  float: right;     /* 오른쪽으로 */
+  float: right; /* 오른쪽으로 */
   text-decoration: underline;
-  cursor: pointer;  /* 손가락 모양 */
+  cursor: pointer; /* 손가락 모양 */
   color: #ff0000;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.like-button i {
+  margin-right: 5px;
+}
+
+.like-button.liked i {
+  color: #ff0000;
+}
+
+.like-count {
+  font-size: 16px;
 }
