@@ -20,7 +20,6 @@ public class CreateCommentOrLikeDto {
 
 	// @NotBlank(message = "Comment is mandatory")
 	private String comment;
-	private CommentOrLike commentOrLike;
 
 	public static Comment toCommentEntity(CreateCommentOrLikeDto createCommentOrLikeDto, Member member, Post post) {
 		Comment comment = Comment.builder()

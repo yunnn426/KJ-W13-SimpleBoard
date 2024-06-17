@@ -1,4 +1,4 @@
-package com.example.demo.board.repository;
+package com.example.demo.board.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.board.entity.Comment;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentJpaRepository extends JpaRepository<Comment, Long> {
 
 	@Query("select c from Comment c "
 			+ "join fetch c.member m "

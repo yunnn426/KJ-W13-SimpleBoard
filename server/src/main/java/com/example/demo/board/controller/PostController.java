@@ -5,7 +5,6 @@ import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -82,14 +81,24 @@ public class PostController {
 		return postService.getPostById(postId);
 	}
 
-	@PostMapping("/reaction")
+	@PostMapping("/reaction/like")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createCommentOrLike(
+	public void createLike(
 		@AuthenticationPrincipal UserDetails userDetails,
 		@Valid @RequestBody CreateCommentOrLikeDto createCommentOrLikeDto
 	) {
 		String username = userDetails.getUsername();
-		postService.createCommentOrLike(createCommentOrLikeDto, username);
+		postService.createOrDeleteLike(createCommentOrLikeDto, username);
+	}
+
+	@PostMapping("/reaction/comment")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void createComment(
+		@AuthenticationPrincipal UserDetails userDetails,
+		@Valid @RequestBody CreateCommentOrLikeDto createCommentOrLikeDto
+	) {
+		String username = userDetails.getUsername();
+		postService.createOrDeleteLike(createCommentOrLikeDto, username);
 	}
 
 
