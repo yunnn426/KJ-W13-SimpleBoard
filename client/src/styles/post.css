@@ -28,8 +28,16 @@ p {
 .delete {
   float: right; /* 오른쪽으로 */
   text-decoration: underline;
+  margin-left: 0.5rem;
   cursor: pointer; /* 손가락 모양 */
-  color: #ff0000;
+  color: #f44336;
+}
+
+.update {
+  float: right;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #04AA6D;
 }
 
 .modal-footer {

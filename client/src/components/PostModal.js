@@ -8,6 +8,8 @@ import LikeList from './LikeList';
 import Comment from './Comment';
 import CommentList from './CommentList';
 import '../styles/modal.css';
+import usePatch from '../hooks/usePatch';
+import UpdateModal from './UpdateModal';
 
 const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
   const url = useContext(UrlContext);
@@ -87,6 +89,21 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
     fetchPost();
   };
 
+  /* 글 수정 모달 */
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+  const openUpdateModal = () => {
+    setIsUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+  const handleUpdateSuccess = () => {
+    fetchPost();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -111,9 +128,18 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
             <span className="delete" onClick={handleDelete}>
               삭제
             </span>
+            <span className="update" onClick={openUpdateModal}>
+              수정
+            </span>
           </div>
           <div className="like-list">
-            <Like postId={postId} likeCount={likeCount} showLikeList={showLikeList} setShowLikeList={setShowLikeList} onLikeSuccess={handleLikeSuccess}/>
+            <Like
+              postId={postId}
+              likeCount={likeCount}
+              showLikeList={showLikeList}
+              setShowLikeList={setShowLikeList}
+              onLikeSuccess={handleLikeSuccess}
+            />
             <LikeList showLikeList={showLikeList} likeList={likeList} />
           </div>
           <div className="comment-section">
@@ -125,6 +151,9 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
         </div>
         <div className="modal-footer"></div>
       </div>
+      {isUpdateModalOpen && (
+        <UpdateModal postId={postId} isOpen={isUpdateModalOpen} onClose={closeUpdateModal} onUpdateSuccess={handleUpdateSuccess} />
+      )}
     </div>
   );
 };

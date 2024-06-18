@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import usePost from '../hooks/usePost';
+import React, { useState, useContext } from 'react';
+import usePatch from '../hooks/usePatch';
+import { UrlContext } from '../App';
 import '../styles/modal.css';
 
-const CreateModal = ({ url, isOpen, onClose, onPostSuccess }) => {
+const UpdateModal = ({ postId, isOpen, onClose, onUpdateSuccess }) => {
+  const url = useContext(UrlContext);
   const [formData, setFormData] = useState({
+    id: postId,
     title: '',
     content: '',
   });
@@ -16,19 +19,20 @@ const CreateModal = ({ url, isOpen, onClose, onPostSuccess }) => {
     });
   };
 
-  const { postData, responsePostData } = usePost(url, formData);
+  const { patchData, responsePatchData } = usePatch(`${url}/board/update`, formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await postData();
+    const success = await patchData();
 
     if (success) {
-      onPostSuccess(); // 성공 시 부모 컴포넌트에 알림
+      onUpdateSuccess();
       onClose();
     } else {
-      alert(`Submit post failed.`);
+      alert('Submit post failed.');
     }
 
     setFormData({
+      id: null,
       title: '',
       content: '',
     });
@@ -40,7 +44,7 @@ const CreateModal = ({ url, isOpen, onClose, onPostSuccess }) => {
     <div className="modal">
       <div className="modal-content">
         <div className="modal-header">
-          <h2>글쓰기</h2>
+          <h2>글 수정</h2>
           <span className="close" onClick={onClose}>
             &times;
           </span>
@@ -74,4 +78,4 @@ const CreateModal = ({ url, isOpen, onClose, onPostSuccess }) => {
   );
 };
 
-export default CreateModal;
+export default UpdateModal;
