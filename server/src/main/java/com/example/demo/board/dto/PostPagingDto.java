@@ -21,4 +21,8 @@ public class PostPagingDto {
 	@NotBlank(message = "Sort direction is mandatory")
 	@Pattern(regexp = "DESC|ASC", message = "Sort direction must be either DESC or ASC")
 	private String sort;
+
+	private String title;
+	private String content;
+	private String writer;
 }
