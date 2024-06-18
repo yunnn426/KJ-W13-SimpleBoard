@@ -75,7 +75,7 @@ public class PostService {
 	public Page<ResponsePagePostDto> findAllPost(PostPagingDto postPagingDto) {
 		Sort sort = Sort.by(Sort.Direction.fromString(postPagingDto.getSort()), "postId");
 		Pageable pageable = PageRequest.of(postPagingDto.getPage(), postPagingDto.getSize(), sort);
-		Page<Post> posts = postRepository.findAll(pageable);
+		Page<Post> posts = postRepository.searchPost(postPagingDto, pageable);
 		return posts.map(ResponsePagePostDto::toDto);
 	}
 

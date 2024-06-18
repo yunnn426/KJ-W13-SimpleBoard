@@ -1,23 +1,16 @@
 package com.example.demo.board.repository.customRepository;
 
-import static com.example.demo.board.entity.QLikeTable.*;
 import static com.example.demo.board.entity.QPost.*;
-import static com.example.demo.member.entity.QMember.*;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.board.dto.RequestSearchPostDto;
+import com.example.demo.board.dto.PostPagingDto;
 import com.example.demo.board.entity.Post;
-import com.example.demo.board.entity.QLikeTable;
-import com.example.demo.board.entity.QPost;
-import com.example.demo.member.entity.QMember;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,11 +26,11 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public Page<Post> searchPost(RequestSearchPostDto requestSearchPostDto, Pageable pageable) {
+	public Page<Post> searchPost(PostPagingDto postPagingDto, Pageable pageable) {
 		List<Post> posts = jpaQueryFactory
 			.selectFrom(post)
 			.leftJoin(post.writer).fetchJoin()
-			.where(allLike(requestSearchPostDto))
+			.where(allLike(postPagingDto))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -45,12 +38,12 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 		JPAQuery<Long> countQuery = jpaQueryFactory
 			.select(post.count())
 			.from(post)
-			.where(allLike(requestSearchPostDto));
+			.where(allLike(postPagingDto));
 
 		return PageableExecutionUtils.getPage(posts, pageable, countQuery::fetchOne);
 	}
 
-	private BooleanExpression nicknameLike(String nicknameCond) {
+	private BooleanExpression writerLike(String nicknameCond) {
 		return nicknameCond != null ? post.writer.nickname.like("%"+nicknameCond+"%") : null;
 	}
 
@@ -62,9 +55,9 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 		return contentCond != null ? post.content.like("%"+contentCond+"%") : null;
 	}
 
-	private BooleanExpression allLike(RequestSearchPostDto requestSearchPostDto) {
-		return nicknameLike(requestSearchPostDto.getNickname())
-			.and(titleLike(requestSearchPostDto.getTitle()))
-			.and(contentLike(requestSearchPostDto.getContent()));
+	private BooleanExpression allLike(PostPagingDto postPagingDto) {
+		return writerLike(postPagingDto.getWriter())
+			.and(titleLike(postPagingDto.getTitle()))
+			.and(contentLike(postPagingDto.getContent()));
 	}
 }

@@ -24,15 +24,9 @@ public interface LikeJpaRepository extends JpaRepository<LikeTable, Long> {
 	Optional<LikeTable> findByLikeId(@Param("likeId") Long commentId);
 
 	@Query("select l from LikeTable l "
-		+ "left join l.member m "
+		+ "join fetch l.member m "
 		+ "join fetch l.post p "
 		+ "where m.username = :username "
 		+ "and p.postId = :postId")
 	Optional<LikeTable> findByUsername(@Param("postId") Long postId, @Param("username") String username);
-
-	@Query("select case when count(l) > 0 then true else false end from LikeTable l "
-		+ "join l.member m "
-		+ "join l.post p "
-		+ "where p.postId = :postId and m.username = :username")
-	boolean existsLikeWithUsername(@Param("postId") Long postId, @Param("username") String username);
 }
