@@ -99,17 +99,12 @@ const BoardForm = () => {
           글쓰기
         </button>
         {posts.map((post) => (
-          <Post key={post.postId} value={post} onClick={() => viewPost(post.postId)} />
+          <Post key={post.id} value={post} onClick={() => viewPost(post.postId)} />
         ))}
       </div>
       <CreateModal isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
       {isPostModalOpen && (
-        <PostModal
-          isOpen={isPostModalOpen}
-          onClose={closePostModal}
-          onDeleteSuccess={handleDeleteSuccess}
-          postId={selectedPost}
-        ></PostModal>
+        <PostModal isOpen={isPostModalOpen} onClose={closePostModal} onDeleteSuccess={handleDeleteSuccess} postId={selectedPost}></PostModal>
       )}
       <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
     </div>

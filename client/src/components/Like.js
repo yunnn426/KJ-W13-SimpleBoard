@@ -12,9 +12,9 @@ const Like = ({ postId, likeCount, showLikeList, setShowLikeList }) => {
   };
   const { postData } = usePost(`${url}/board/reaction/like`, postBody);
   const handleLike = async () => {
-    const response = await postData();
+    const success = await postData();
 
-    if (response.ok) {
+    if (success) {
       setLiked(!liked);
       // console.log('OK');
     } else {
