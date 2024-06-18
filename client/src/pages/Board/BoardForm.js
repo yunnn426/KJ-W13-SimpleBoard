@@ -85,6 +85,7 @@ const BoardForm = () => {
 
   const closePostModal = () => {
     setIsPostModalOpen(false);
+    fetchBoard();
   };
 
   const handleDeleteSuccess = () => {
@@ -101,7 +102,7 @@ const BoardForm = () => {
           <Post key={post.id} value={post} onClick={() => viewPost(post.postId)} />
         ))}
       </div>
-      <CreateModal isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
+      <CreateModal url={`${url}/board/create`} isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
       {isPostModalOpen && (
         <PostModal isOpen={isPostModalOpen} onClose={closePostModal} onDeleteSuccess={handleDeleteSuccess} postId={selectedPost}></PostModal>
       )}
