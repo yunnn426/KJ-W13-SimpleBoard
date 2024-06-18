@@ -30,7 +30,11 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 		List<Post> posts = jpaQueryFactory
 			.selectFrom(post)
 			.leftJoin(post.writer).fetchJoin()
-			.where(allLike(postPagingDto))
+			.where(
+				writerLike(postPagingDto.getWriter()),
+				titleLike(postPagingDto.getTitle()),
+				contentLike(postPagingDto.getContent())
+			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -38,7 +42,11 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 		JPAQuery<Long> countQuery = jpaQueryFactory
 			.select(post.count())
 			.from(post)
-			.where(allLike(postPagingDto));
+			.where(
+				writerLike(postPagingDto.getWriter()),
+				titleLike(postPagingDto.getTitle()),
+				contentLike(postPagingDto.getContent())
+			);
 
 		return PageableExecutionUtils.getPage(posts, pageable, countQuery::fetchOne);
 	}
@@ -53,11 +61,5 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
 	private BooleanExpression contentLike(String contentCond) {
 		return contentCond != null ? post.content.like("%"+contentCond+"%") : null;
-	}
-
-	private BooleanExpression allLike(PostPagingDto postPagingDto) {
-		return writerLike(postPagingDto.getWriter())
-			.and(titleLike(postPagingDto.getTitle()))
-			.and(contentLike(postPagingDto.getContent()));
 	}
 }
