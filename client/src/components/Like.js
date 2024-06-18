@@ -3,7 +3,7 @@ import { UrlContext } from '../App';
 import usePost from '../hooks/usePost';
 import '../styles/like.css';
 
-const Like = ({ postId, likeCount, showLikeList, setShowLikeList }) => {
+const Like = ({ postId, likeCount, showLikeList, setShowLikeList, onLikeSuccess }) => {
   const url = useContext(UrlContext);
   const [liked, setLiked] = useState(false);
 
@@ -16,6 +16,7 @@ const Like = ({ postId, likeCount, showLikeList, setShowLikeList }) => {
 
     if (success) {
       setLiked(!liked);
+      onLikeSuccess();
       // console.log('OK');
     } else {
       // console.log('NOT OK');

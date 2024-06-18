@@ -39,7 +39,7 @@ const BoardForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         const p = data._embedded.responsePagePostDtoList;
         setTotalPages(data.page.totalPages);
         setPosts(p);
