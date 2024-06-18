@@ -27,7 +27,6 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
 
   // 여기서 hook으로 받아오려 하니까 Promise Pending 문제 발생
   const fetchPost = async () => {
-    console.log('Fetch!');
     try {
       const response = await fetch(`${url}/board/posts/${postId}`, {
         method: 'GET',
@@ -60,9 +59,7 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
 
   useEffect(() => {
     fetchPost();
-  }, [url, token]);
-
-  // console.log(getData);
+  }, [url, token, likeCount]);
 
   /* 글 DELETE */
   const { deleteData, responseDeleteData } = useDelete(`${url}/board/delete/${postId}`);
@@ -82,6 +79,11 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
 
   /* 댓글 등록 */
   const handleCommentSuccess = () => {
+    fetchPost();
+  };
+
+  /* 좋아요 눌리면 좋아요 리스트 다시 호출 */
+  const handleLikeSuccess = () => {
     fetchPost();
   };
 
@@ -111,7 +113,7 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
             </span>
           </div>
           <div className="like-list">
-            <Like postId={postId} likeCount={likeCount} showLikeList={showLikeList} setShowLikeList={setShowLikeList} />
+            <Like postId={postId} likeCount={likeCount} showLikeList={showLikeList} setShowLikeList={setShowLikeList} onLikeSuccess={handleLikeSuccess}/>
             <LikeList showLikeList={showLikeList} likeList={likeList} />
           </div>
           <div className="comment-section">
