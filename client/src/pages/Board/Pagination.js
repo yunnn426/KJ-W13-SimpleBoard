@@ -2,46 +2,28 @@ import React from 'react';
 import '../../styles/pagination.css';
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-    const maxPageNumbers = 5;
-    const halfMaxPageNumbers = Math.floor(maxPageNumbers / 2);
+    // console.log(currentPage, totalPages);
 
-    let startPage = Math.max(1, currentPage - halfMaxPageNumbers);
-    let endPage = Math.min(totalPages, startPage + maxPageNumbers - 1);
-
-    if (endPage - startPage + 1 < maxPageNumbers) {
-        startPage = Math.max(1, endPage - maxPageNumbers + 1);
+    const goToPrevPage = () => {
+        if (currentPage > 0)
+            onPageChange(currentPage - 1);
     }
 
-    const pages = [];
-    for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
+    const goToNextPage = () => {
+        if (currentPage < totalPages - 1)
+            onPageChange(currentPage + 1);
     }
 
     return (
-        <div className="pagination">
-            <button 
-                onClick={() => onPageChange(currentPage - 1)} 
-                disabled={currentPage === 1}
-            >
+        <div className='pagination'>
+            <button className='active' onClick={goToPrevPage} disabled={currentPage === 0}>
                 이전
             </button>
-            {pages.map((page) => (
-                <button
-                    key={page}
-                    onClick={() => onPageChange(page)}
-                    className={page === currentPage ? 'active' : ''}
-                >
-                    {page}
-                </button>
-            ))}
-            <button 
-                onClick={() => onPageChange(currentPage + 1)} 
-                disabled={currentPage === totalPages}
-            >
+            <button className='disabled' onClick={goToNextPage} disabled={currentPage === totalPages - 1}>
                 다음
             </button>
         </div>
-    );
+    )
 };
 
 export default Pagination;

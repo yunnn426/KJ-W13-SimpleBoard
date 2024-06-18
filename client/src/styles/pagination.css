@@ -6,21 +6,24 @@
 }
 
 .pagination button {
+    width: 20%;
     margin: 0 2px;
     padding: 5px 10px;
     border: 1px solid #ddd;
+    color: #000000;
     background-color: #fff;
     cursor: pointer;
 }
 
 .pagination button.active {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
+    background-color: #e7e7e7;
+    color: #000000;
+    border-color: #e7e7e7;
 }
 
 .pagination button:disabled {
     background-color: #f0f0f0;
-    color: #999;
+    border-color: #e7e7e7;
+    color: #000000;
     cursor: not-allowed;
 }

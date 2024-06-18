@@ -15,17 +15,16 @@ const BoardForm = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
-  const [sort, setSort] = useState('DESC');
-  const [totalItems, setTotalItems] = useState(15);
-  const [totalPages, setTotalPages] = useState(Math.ceil(totalItems / size));
+  const [sort, setSort] = useState('ASC');
+  const [totalPages, setTotalPages] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
 
   // 게시글 불러오기
   const fetchBoard = async () => {
     const queryParams = {
-      page: 0,
-      size: 5,
-      sort: 'DESC',
+      page: page,
+      size: size,
+      sort: sort,
     };
 
     try {
@@ -40,9 +39,9 @@ const BoardForm = () => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         const p = data._embedded.responsePagePostDtoList;
-        setTotalItems(data.totalItems);
-        setTotalPages(Math.ceil(data.totalItems / size));
+        setTotalPages(data.page.totalPages);
         setPosts(p);
       } else {
         const errorData = await response.json();
