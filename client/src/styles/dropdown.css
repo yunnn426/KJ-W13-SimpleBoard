@@ -16,10 +16,10 @@
 }
 
 .dropbtn {
-  flex: 1;
+  flex: 1 !important;
   background-color: white !important;
   color: black !important;
-  min-width: 40%;
+  min-width: 20%;
   font-size: 16px;
   cursor: pointer;
   margin: 0; /* 내부 여백 초기화 */
@@ -31,7 +31,7 @@
 }
 
 .keyword {
-  flex: 3; /* 입력란의 비율을 3으로 설정 */
+  flex: 3 !important; /* 입력란의 비율을 3으로 설정 */
   border: none; /* 입력란의 border를 제거 */
   font-size: 16px;
   outline: none; /* 포커스시 테두리 제거 */
@@ -40,10 +40,11 @@
 }
 
 .searchbtn {
-  flex: 1;
-  margin: 0;
+  flex: 1 !important;
   background-color: #e3e3e3 !important;
   color: black !important;
+  margin: 0; /* Reset internal margin */
+  padding: 12px 16px; /* Set input internal padding */
 }
 
 /* Dropdown content (hidden by default) */
