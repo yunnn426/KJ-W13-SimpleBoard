@@ -24,6 +24,7 @@ import com.example.demo.board.repository.JpaRepository.LikeJpaRepository;
 import com.example.demo.board.repository.PostRepository;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
+import com.querydsl.core.types.Order;
 
 import lombok.RequiredArgsConstructor;
 
@@ -74,7 +75,8 @@ public class PostService {
 
 	public Page<ResponsePagePostDto> findAllPost(PostPagingDto postPagingDto) {
 		Sort sort = Sort.by(Sort.Direction.fromString(postPagingDto.getSort()), "postId");
-		Pageable pageable = PageRequest.of(postPagingDto.getPage(), postPagingDto.getSize(), sort);
+		Pageable pageable = PageRequest.of(postPagingDto.getPage(), postPagingDto.getSize(),
+			Sort.by(convertToSortDirection(postPagingDto.getSort()), postPagingDto.getSortField()));
 		Page<Post> posts = postRepository.searchPost(postPagingDto, pageable);
 		return posts.map(ResponsePagePostDto::toDto);
 	}
@@ -128,5 +130,15 @@ public class PostService {
 			.orElseThrow(() -> new IllegalArgumentException("Comment not found"));
 		likeTable.deleteLike();
 		likeJpaRepository.delete(likeTable);
+	}
+
+	private Sort.Direction convertToSortDirection(String sort) {
+		if (sort.equalsIgnoreCase("ASC")) {
+			return Sort.Direction.ASC;
+		} else if (sort.equalsIgnoreCase("DESC")) {
+			return Sort.Direction.DESC;
+		} else {
+			throw new IllegalArgumentException("Invalid sort direction: " + sort);
+		}
 	}
 }

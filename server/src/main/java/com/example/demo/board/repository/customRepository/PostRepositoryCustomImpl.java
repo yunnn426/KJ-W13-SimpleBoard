@@ -11,7 +11,11 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.board.dto.PostPagingDto;
 import com.example.demo.board.entity.Post;
+import com.example.demo.board.entity.QPost;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -35,6 +39,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 				titleLike(postPagingDto.getTitle()),
 				contentLike(postPagingDto.getContent())
 			)
+			.orderBy(getOrderSpecifier(postPagingDto))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -62,4 +67,15 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 	private BooleanExpression contentLike(String contentCond) {
 		return contentCond != null ? post.content.like("%"+contentCond+"%") : null;
 	}
+
+	private OrderSpecifier<?> getOrderSpecifier(PostPagingDto postPagingDto) {
+		PathBuilder<Post> entityPath = new PathBuilder<>(Post.class, "post");
+		if (postPagingDto.getSort().equals("ACS")) {
+			return new OrderSpecifier(Order.ASC, entityPath.get(postPagingDto.getSortField()));
+		} else {
+			return new OrderSpecifier(Order.DESC, entityPath.get(postPagingDto.getSortField()));
+		}
+	}
+
+
 }

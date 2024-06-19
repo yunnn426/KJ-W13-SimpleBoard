@@ -22,6 +22,10 @@ public class PostPagingDto {
 	@Pattern(regexp = "DESC|ASC", message = "Sort direction must be either DESC or ASC")
 	private String sort;
 
+	// 정렬할 field 의 이름
+	@NotBlank(message = "Sort field is mandatory")
+	private String sortField;
+
 	private String title;
 	private String content;
 	private String writer;
