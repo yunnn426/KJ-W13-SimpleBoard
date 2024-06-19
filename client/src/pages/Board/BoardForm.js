@@ -99,8 +99,8 @@ const BoardForm = () => {
         <button className="button" onClick={openCreateModal}>
           글쓰기
         </button>
-        {posts.map((post) => (
-          <Post key={post.id} value={post} onClick={() => viewPost(post.postId)} />
+        {posts.map((post, postIdx) => (
+          <Post key={postIdx} value={post} onClick={() => viewPost(post.postId)} />
         ))}
       </div>
       <CreateModal url={`${url}/board/create`} isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />

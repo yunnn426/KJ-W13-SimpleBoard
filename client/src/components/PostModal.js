@@ -2,18 +2,21 @@ import React, { useState, useContext, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { UrlContext } from '../App';
 import useDelete from '../hooks/useDelete';
-import usePost from '../hooks/usePost';
 import Like from './Like';
 import LikeList from './LikeList';
 import Comment from './Comment';
 import CommentList from './CommentList';
-import '../styles/modal.css';
-import usePatch from '../hooks/usePatch';
 import UpdateModal from './UpdateModal';
+import decodeToken from './DecodeToken';
+import '../styles/modal.css';
 
 const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
   const url = useContext(UrlContext);
   const token = Cookies.get('accessToken');
+  const decodedToken = decodeToken(token);
+
+  /* 로그인한 유저가 글쓴이인지 여부 */
+  const [isWriter, setIsWriter] = useState(false);
 
   /* 글 */
   const [getData, setGetData] = useState([]);
@@ -22,6 +25,7 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
   const [likeList, setLikeList] = useState([]);
   const [likeCount, setLikeCount] = useState(0);
   const [showLikeList, setShowLikeList] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   /* 댓글 */
   const [commentList, setCommentList] = useState([]);
@@ -48,6 +52,15 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
         // 댓글 관련 상태값 변경
         setCommentList(jsonData.responsePostCommentDtoList);
         setCommentCount(jsonData.responsePostCommentDtoList.length);
+        // 로그인된 유저와 글쓴이가 같은지 확인
+        setIsWriter(decodedToken.nickname == jsonData.writer); // getData로 받아오면 안됨
+        // 내가 이미 좋아요 한 글인지 확인
+        jsonData.responsePostLikeDtoList.some(function (liker) {
+          if (liker.memberNickname === decodedToken.nickname) {
+            setIsLiked(true);
+          }
+        });
+
         // console.log(commentList);
         // console.log(commentCount);
       } else {
@@ -61,7 +74,7 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
 
   useEffect(() => {
     fetchPost();
-  }, [url, token, likeCount]);
+  }, []);
 
   /* 글 DELETE */
   const { deleteData, responseDeleteData } = useDelete(`${url}/board/delete/${postId}`);
@@ -125,15 +138,20 @@ const PostModal = ({ isOpen, onClose, onDeleteSuccess, postId }) => {
           <hr />
           <div className="post-content">
             <div>{getData.content}</div>
-            <span className="delete" onClick={handleDelete}>
-              삭제
-            </span>
-            <span className="update" onClick={openUpdateModal}>
-              수정
-            </span>
+            {isWriter && (
+              <span className="delete" onClick={handleDelete}>
+                삭제
+              </span>
+            )}
+            {isWriter && (
+              <span className="update" onClick={openUpdateModal}>
+                수정
+              </span>
+            )}
           </div>
           <div className="like-list">
             <Like
+              isLiked={isLiked}
               postId={postId}
               likeCount={likeCount}
               showLikeList={showLikeList}
