@@ -15,7 +15,7 @@ const BoardForm = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
-  const [sort, setSort] = useState('ASC');
+  const [sort, setSort] = useState('DESC');
   const [totalPages, setTotalPages] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
 
@@ -25,6 +25,7 @@ const BoardForm = () => {
       page: page,
       size: size,
       sort: sort,
+      sortField: 'createdDate',
     };
 
     try {
