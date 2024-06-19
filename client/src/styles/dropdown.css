@@ -1,0 +1,85 @@
+/* Dropdown container - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchby {
+  display: flex;
+  background-color: white !important;
+  border: 1px solid #e3e3e3 !important;
+  border-radius: 5px;
+  align-items: center !important;
+  padding: 5px;
+}
+
+.dropbtn {
+  flex: 1;
+  background-color: white !important;
+  color: black !important;
+  min-width: 40%;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0; /* 내부 여백 초기화 */
+  padding: 12px 16px; /* 버튼 내부 패딩 설정 */
+}
+
+.dropdown-icon {
+  margin: 0;
+}
+
+.keyword {
+  flex: 3; /* 입력란의 비율을 3으로 설정 */
+  border: none; /* 입력란의 border를 제거 */
+  font-size: 16px;
+  outline: none; /* 포커스시 테두리 제거 */
+  margin: 0; /* 내부 여백 초기화 */
+  padding: 12px 16px; /* 입력란 내부 패딩 설정 */
+}
+
+.searchbtn {
+  flex: 1;
+  margin: 0;
+  background-color: #e3e3e3 !important;
+  color: black !important;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border: 1px solid #e3e3e3;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  top: 90%; /* 버튼 아래에 나타나도록 설정 */
+  left: 0; /* 왼쪽 정렬 */
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+/* Show the dropdown menu on hover */
+.dropbtn:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button on hover */
+.dropbtn:hover .dropbtn {
+  background-color: #ddd;
+}
