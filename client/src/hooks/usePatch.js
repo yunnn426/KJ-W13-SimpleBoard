@@ -18,8 +18,6 @@ const usePatch = (url, postBody) => {
 
     if (response.ok) return true;
     else return false;
-
-    return data;
   };
 
   return { patchData };

@@ -28,7 +28,7 @@ const UpdateModal = ({ postId, isOpen, onClose, onUpdateSuccess }) => {
       onUpdateSuccess();
       onClose();
     } else {
-      alert('Submit post failed.');
+      alert('자신이 작성한 글만 수정할 수 있습니다.');
     }
 
     setFormData({

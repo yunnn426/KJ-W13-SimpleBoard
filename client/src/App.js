@@ -7,30 +7,10 @@ import BoardPage from '../src/pages/Board/BoardPage';
 import Cookies from 'js-cookie';
 import Navbar from './components/Navbar';
 import ChatPage from '../src/pages/Chat/ChatPage';
+import decodeToken from './components/DecodeToken';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export const UrlContext = createContext();
-
-const decodeToken = (token) => {
-  if (!token) {
-    throw new Error('No token provided');
-  }
-
-  const base64Url = token.split('.')[1];
-  if (!base64Url) {
-    throw new Error('Invalid token');
-  }
-
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split('')
-      .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-      .join('')
-  );
-
-  return JSON.parse(jsonPayload);
-};
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -57,7 +37,7 @@ const App = () => {
   };
 
   return (
-    <UrlContext.Provider value="http://localhost:8080">
+    <UrlContext.Provider value="http://172.30.1.41:8080">
       <Router>
         {isLoggedIn && <Navbar nickname={nickname} onChatClick={handleShowChat} />}
         <Routes>
