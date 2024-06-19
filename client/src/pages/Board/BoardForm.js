@@ -6,6 +6,7 @@ import Pagination from './Pagination';
 import Post from '../../components/Post';
 import PostModal from '../../components/PostModal';
 import SearchFilter from '../../components/SearchFilter';
+import SortBy from '../../components/SortBy';
 import '../../styles/board.css';
 import '../../styles/pagination.css';
 
@@ -46,9 +47,8 @@ const BoardForm = () => {
       });
 
       if (response.ok) {
-        console.log()
         const data = await response.json();
-        // console.log(data);
+        console.log(data);
         const p = data._embedded.responsePagePostDtoList;
         setTotalPages(data.page.totalPages);
         setPosts(p);
@@ -66,6 +66,7 @@ const BoardForm = () => {
 
   useEffect(() => {
     fetchBoard();
+    console.log('UE');
   }, [page, size, sort, content, title, writer]);
 
   const handlePostSuccess = () => {
@@ -111,7 +112,11 @@ const BoardForm = () => {
     if (category == '제목') setTitle(searchKey);
     else if (category == '내용') setContent(searchKey);
     else if (category == '글쓴이') setWriter(searchKey);
-    // fetchBoard();
+  };
+
+  /* 정렬 필터 */
+  const handleSort = async (standard) => {
+    setSort(standard);
   };
 
   return (
@@ -119,6 +124,7 @@ const BoardForm = () => {
       <div className="board-container">
         <div className="header">
           <SearchFilter onSearch={handleSearch} />
+          <SortBy onSort={handleSort} />
           <button className="button" onClick={openCreateModal}>
             글쓰기
           </button>
