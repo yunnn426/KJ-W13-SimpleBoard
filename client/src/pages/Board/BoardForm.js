@@ -4,9 +4,11 @@ import Cookies from 'js-cookie';
 import CreateModal from '../../components/CreateModal';
 import Pagination from './Pagination';
 import Post from '../../components/Post';
+import PostModal from '../../components/PostModal';
+import SearchFilter from '../../components/SearchFilter';
+import SortBy from '../../components/SortBy';
 import '../../styles/board.css';
 import '../../styles/pagination.css';
-import PostModal from '../../components/PostModal';
 
 const BoardForm = () => {
   const url = useContext(UrlContext);
@@ -18,6 +20,9 @@ const BoardForm = () => {
   const [sort, setSort] = useState('DESC');
   const [totalPages, setTotalPages] = useState(0);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [content, setContent] = useState(null);
+  const [title, setTitle] = useState(null);
+  const [writer, setWriter] = useState(null);
 
   // 게시글 불러오기
   const fetchBoard = async () => {
@@ -25,6 +30,9 @@ const BoardForm = () => {
       page: page,
       size: size,
       sort: sort,
+      content: content,
+      title: title,
+      writer: writer,
       sortField: 'createdDate',
     };
 
@@ -40,23 +48,26 @@ const BoardForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-        // console.log(data);
+        console.log(data);
         const p = data._embedded.responsePagePostDtoList;
         setTotalPages(data.page.totalPages);
         setPosts(p);
       } else {
         const errorData = await response.json();
+        setPosts([]);
         alert(`Board fetch failed: ${errorData.message}`);
       }
     } catch (error) {
       console.error('Error fetching board:', error);
+      setPosts([]);
       // alert('An error occured while fetching board.');
     }
   };
 
   useEffect(() => {
     fetchBoard();
-  }, [page, size, sort]);
+    console.log('UE');
+  }, [page, size, sort, content, title, writer]);
 
   const handlePostSuccess = () => {
     fetchBoard();
@@ -93,15 +104,32 @@ const BoardForm = () => {
     fetchBoard();
   };
 
+  /* 검색 필터 */
+  const handleSearch = async (category, searchKey) => {
+    setTitle('');
+    setContent('');
+    setWriter('');
+    if (category == '제목') setTitle(searchKey);
+    else if (category == '내용') setContent(searchKey);
+    else if (category == '글쓴이') setWriter(searchKey);
+  };
+
+  /* 정렬 필터 */
+  const handleSort = async (standard) => {
+    setSort(standard);
+  };
+
   return (
     <div>
       <div className="board-container">
-        <button className="button" onClick={openCreateModal}>
-          글쓰기
-        </button>
-        {posts.map((post, postIdx) => (
-          <Post key={postIdx} value={post} onClick={() => viewPost(post.postId)} />
-        ))}
+        <div className="header">
+          <SearchFilter onSearch={handleSearch} />
+          <SortBy onSort={handleSort} />
+          <button className="button" onClick={openCreateModal}>
+            글쓰기
+          </button>
+        </div>
+        {posts.length > 0 && posts.map((post, postIdx) => <Post key={postIdx} value={post} onClick={() => viewPost(post.postId)} />)}
       </div>
       <CreateModal url={`${url}/board/create`} isOpen={isCreateModalOpen} onClose={closeCreateModal} onPostSuccess={handlePostSuccess} />
       {isPostModalOpen && (

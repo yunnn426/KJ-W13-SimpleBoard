@@ -37,7 +37,7 @@ const App = () => {
   };
 
   return (
-    <UrlContext.Provider value="http://172.30.1.41:8080">
+    <UrlContext.Provider value="http://172.30.1.51:8080">
       <Router>
         {isLoggedIn && <Navbar nickname={nickname} onChatClick={handleShowChat} />}
         <Routes>
