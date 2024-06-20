@@ -15,5 +15,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query("select m from Member m "
 		+ "where m.username = :username")
 	Optional<Member> findByUsername(@Param("username") String username);
+
+	default Member findByUsernameWithoutOptional (String username) {
+		return findByUsername(username).orElseThrow(() -> new IllegalArgumentException("%s is not found".formatted(username)));
+	}
+
 	Boolean existsByUsername(String username);
 }

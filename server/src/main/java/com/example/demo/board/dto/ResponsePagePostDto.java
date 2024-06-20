@@ -1,8 +1,5 @@
 package com.example.demo.board.dto;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 import com.example.demo.board.entity.Post;
 import com.example.demo.config.DateTimeUtil;
 

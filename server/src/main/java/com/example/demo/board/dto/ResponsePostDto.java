@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.demo.board.entity.Comment;
 import com.example.demo.board.entity.LikeTable;
 import com.example.demo.board.entity.Post;
+import com.example.demo.config.DateTimeUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +26,8 @@ public class ResponsePostDto {
 	private String writer;
 	private Long writerId;
 
-	private LocalDateTime createdDate;
-	private LocalDateTime lastModifiedDate;
+	private String createdDate;
+	private String lastModifiedDate;
 
 	@Builder.Default
 	private List<ResponsePostCommentDto> responsePostCommentDtoList = new ArrayList<>();
@@ -40,8 +41,8 @@ public class ResponsePostDto {
 			.content(post.getContent())
 			.writer(post.getWriter().getNickname())
 			.writerId(post.getWriter().getId())
-			.createdDate(post.getCreatedDate())
-			.lastModifiedDate(post.getLastModifiedDate())
+			.createdDate(DateTimeUtil.formatDateTime(post.getCreatedDate()))
+			.lastModifiedDate(DateTimeUtil.formatDateTime(post.getLastModifiedDate()))
 			.responsePostCommentDtoList(comments.stream()
 				.map(ResponsePostCommentDto::toDto)
 				.toList())
